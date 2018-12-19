@@ -28,10 +28,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #accessing }
-SpeedCard >> addOn: aBoard affecting: aPlayer [ 
+{ #category : #adding }
+SpeedCard >> addOn: aBoard affecting: playersCollection [
+	self assertAffectedPlayerQuantity: playersCollection.
 	aBoard
-		addAnActive: (CardPlayerAffected withCard: self affecting: {aPlayer} asOrderedCollection)
+		addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
 ]
 
 { #category : #affecting }
@@ -39,7 +40,13 @@ SpeedCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 1
 ]
 
-{ #category : #affecting }
+{ #category : #asserting }
+SpeedCard >> assertAffectedPlayerQuantity: playersCollection [
+	playersCollection size ~= 1
+		ifTrue: [ AssertionFailure signal: 'This card can only affect one player' ]
+]
+
+{ #category : #asserting }
 SpeedCard >> assertOwnerCanUseAnytime [
 	owner addCard: self.
 	AssertionFailure signal: 'This is a permanent card'

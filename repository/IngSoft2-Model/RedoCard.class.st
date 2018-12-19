@@ -39,7 +39,7 @@ RedoCard >> addLastCard: aCard [
 	lastCardIsSet := true
 ]
 
-{ #category : #accessing }
+{ #category : #adding }
 RedoCard >> addOn: aBoard affecting: otherGameObject [
 	lastCard addOn: aBoard affecting: otherGameObject
 ]
@@ -56,7 +56,7 @@ RedoCard >> assertOwnerCanUseAnytime [
 
 { #category : #affecting }
 RedoCard >> cancel: otherCard on: aBoard [
-	lastCard affect: otherCard on: aBoard
+	lastCard cancel: otherCard on: aBoard
 
 ]
 
