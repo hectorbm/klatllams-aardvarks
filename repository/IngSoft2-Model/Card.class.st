@@ -33,12 +33,12 @@ Card class >> ownedBy: aPlayer [
 	^ self new initializeOwnedBy: aPlayer.
 ]
 
-{ #category : #accessing }
+{ #category : #adding }
 Card >> addOn: aBoard affecting: playersCollection [
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #adding }
 Card >> addOn: aBoard cancelling: aCard [
 	self cancel: aCard on: aBoard
 ]

@@ -81,7 +81,7 @@ Player >> play: aCard in: aGame [
 Player >> play: aCard in: aGame affecting: aPlayer [
 	myCards
 		detect: [ :each | aCard = each ]
-		ifFound: [ aGame add: aCard affecting: aPlayer.
+		ifFound: [ aGame add: aCard affecting: {aPlayer} asOrderedCollection .
 			myCards remove: aCard ]
 		ifNone: [ AssertionFailure signal: 'Wrong card' ]
 ]

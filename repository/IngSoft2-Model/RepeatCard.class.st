@@ -32,9 +32,10 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #accessing }
-RepeatCard >> addOn: aBoard affecting: aPlayer [
-   self affect: aPlayer on: aBoard
+{ #category : #adding }
+RepeatCard >> addOn: aBoard affecting: aPlayersCollection [
+	self assertAffectedPlayerQuantity: aPlayersCollection.
+	self affect: aPlayersCollection first on: aBoard
 ]
 
 { #category : #affecting }
@@ -43,6 +44,12 @@ RepeatCard >> affect: aPlayer on: aBoard [
 	aPosition := aBoard lastLandingPositionOf: aPlayer.
 	aPosition ~= 0
 		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayer on: aBoard ].
+]
+
+{ #category : #asserting }
+RepeatCard >> assertAffectedPlayerQuantity: aPlayersCollection [
+	aPlayersCollection size ~= 1
+		ifTrue: [ AssertionFailure signal: 'This card can only affect one player' ]
 ]
 
 { #category : #asserting }

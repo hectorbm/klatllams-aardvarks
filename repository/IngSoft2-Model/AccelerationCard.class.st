@@ -28,14 +28,22 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #accessing }
+{ #category : #adding }
 AccelerationCard >> addOn: aBoard affecting: playersCollection [
-	aBoard addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
+	self assertAffectedPlayerQuantity: playersCollection on: aBoard.
+	aBoard
+		addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
 ]
 
 { #category : #affecting }
 AccelerationCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 1
+]
+
+{ #category : #asserting }
+AccelerationCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
+	aBoard gameStatus players ~= playersCollection 
+		ifTrue: [ AssertionFailure signal: 'Acceleration card must affect all the players' ]
 ]
 
 { #category : #asserting }

@@ -28,7 +28,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #accessing }
+{ #category : #adding }
 CancellationCard >> addOn: aBoard affecting: otherCard [
 	self cancel: otherCard on: aBoard
 ]
@@ -42,7 +42,7 @@ CancellationCard >> affect: card on: aBoard [
 CancellationCard >> assertOwnerCanUseAnytime [
 ]
 
-{ #category : #asserting }
+{ #category : #affecting }
 CancellationCard >> cancel: otherCard on: aBoard [
 	aBoard activeBoardCards isEmpty
 	ifTrue: [ owner addCard: self.
