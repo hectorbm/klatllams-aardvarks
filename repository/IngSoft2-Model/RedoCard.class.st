@@ -39,24 +39,25 @@ RedoCard >> addLastCard: aCard [
 	lastCardIsSet := true
 ]
 
+{ #category : #accessing }
+RedoCard >> addOn: aBoard affecting: otherGameObject [
+	lastCard addOn: aBoard affecting: otherGameObject
+]
+
 { #category : #affecting }
 RedoCard >> affect: aPlayer on: aBoard [
-	lastCard affect: aPlayer on: aBoard
+	lastCard affect: aPlayer on: aBoard 
 
 ]
 
 { #category : #asserting }
-RedoCard >> assertCanCancelAnotherCard [
-	lastCardIsSet
-		ifTrue: [ ^ lastCard assertCanCancelAnotherCard ].
-	AssertionFailure signal: 'This card cannot cancel another card'
+RedoCard >> assertOwnerCanUseAnytime [
 ]
 
-{ #category : #asserting }
-RedoCard >> assertCardNeedsLastCard: aCardsCollection [
-	aCardsCollection notEmpty
-		ifTrue: [ self addLastCard: aCardsCollection first ]
-		ifFalse: [ AssertionFailure signal: 'Redo can be used if a Card was Used' ]
+{ #category : #affecting }
+RedoCard >> cancel: otherCard on: aBoard [
+	lastCard affect: otherCard on: aBoard
+
 ]
 
 { #category : #initialization }
@@ -65,9 +66,9 @@ RedoCard >> initializeOwnedBy: aPlayer [
 	lastCardIsSet := false
 ]
 
-{ #category : #asserting }
-RedoCard >> isTransient [
-	lastCardIsSet
-		ifTrue: [ ^ lastCard isTransient ].
-	^ true
+{ #category : #updating }
+RedoCard >> lastPlayedCards: aCardsCollection [
+	aCardsCollection notEmpty
+		ifTrue: [ self addLastCard: aCardsCollection first ]
+		ifFalse: [ AssertionFailure signal: 'Redo only can be used if a Card was Used' ]
 ]
