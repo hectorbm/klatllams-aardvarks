@@ -47,7 +47,7 @@ Player class >> named: aName [
 ]
 
 { #category : #updating }
-Player >> addNewCard: aCard [
+Player >> addCard: aCard [
 	myCards addFirst: aCard
 ]
 

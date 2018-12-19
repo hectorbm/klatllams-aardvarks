@@ -89,7 +89,7 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 ]
 
 { #category : #accessing }
-Board >> activeCardsInfo [
+Board >> activeBoardCards [
 	^ activeCardsInfo
 ]
 

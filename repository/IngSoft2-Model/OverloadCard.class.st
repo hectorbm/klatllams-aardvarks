@@ -28,12 +28,19 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #accessing }
+OverloadCard >> addOn: aBoard affecting: aPlayer [
+	aBoard
+		addAnActive: (CardPlayerAffected withCard: self affecting: {aPlayer} asOrderedCollection)
+]
+
 { #category : #affecting }
 OverloadCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 2 negated
 ]
 
 { #category : #asserting }
-OverloadCard >> isTransient [
-	^ false
+OverloadCard >> assertOwnerCanUseAnytime [
+	owner addCard: self.
+	AssertionFailure signal: 'You cannot play a permanent card right now'
 ]

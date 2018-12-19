@@ -32,6 +32,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #accessing }
+RepeatCard >> addOn: aBoard affecting: aPlayer [
+   self affect: aPlayer on: aBoard
+]
+
 { #category : #affecting }
 RepeatCard >> affect: aPlayer on: aBoard [
 	| aPosition |
@@ -41,6 +46,5 @@ RepeatCard >> affect: aPlayer on: aBoard [
 ]
 
 { #category : #asserting }
-RepeatCard >> isTransient [
-	^ true
+RepeatCard >> assertOwnerCanUseAnytime [
 ]

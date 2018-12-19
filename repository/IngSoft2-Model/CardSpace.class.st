@@ -38,5 +38,5 @@ Class {
 CardSpace >> affect: aPlayer on: aBoard [
 	| aCard |
 	aCard := Card subclasses atRandom ownedBy: aPlayer.
-	aPlayer addNewCard: aCard
+	aPlayer addCard: aCard
 ]

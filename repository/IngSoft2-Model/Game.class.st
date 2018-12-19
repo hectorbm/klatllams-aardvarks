@@ -92,43 +92,26 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 ]
 
 { #category : #accessing }
-Game >> activeCardsInfo [
-	^ board activeCardsInfo
+Game >> activeBoardCards [
+	^ board activeBoardCards
 ]
 
 { #category : #actions }
 Game >> add: aCard [
 	self assertPlayerCanUseA: aCard.
-	aCard assertCardNeedsLastCard: cardsHistory.
-	aCard isPermanent
-		ifTrue: [ cardsHistory add: aCard.
-			board addAnActive: (CardPlayerAffected withCard: aCard affecting: players elements) ]
+	aCard addOn: board affecting: players elements
 ]
 
 { #category : #actions }
 Game >> add: aCard affecting: aPlayer [
 	self assertPlayerCanUseA: aCard.
-	aCard assertCardNeedsLastCard: cardsHistory.
-	cardsHistory addFirst: aCard.
-	aCard isTransient
-		ifTrue: [ aCard affect: aPlayer on: board ]
-		ifFalse:[ board addAnActive: (CardPlayerAffected withCard: aCard affecting: {aPlayer} asOrderedCollection)]
+	aCard addOn: board affecting: aPlayer
 ]
 
 { #category : #actions }
 Game >> add: aCard cancelling: anotherCard [
-	aCard assertCardNeedsLastCard: cardsHistory.
-	self assertCancellingCanBeDoneBy: aCard.
-	cardsHistory addFirst: aCard.
-	aCard affect: anotherCard on: board
-]
-
-{ #category : #asserting }
-Game >> assertCancellingCanBeDoneBy: aCard [
-	board activeCardsInfo isEmpty
-		ifTrue: [ aCard owner addNewCard: aCard.
-			AssertionFailure signal: 'You cannot play a canceling card when there are no active cards.' ].
-	aCard assertCanCancelAnotherCard
+	self assertPlayerCanUseA: aCard.
+	aCard addOn: board cancelling: anotherCard
 ]
 
 { #category : #asserting }
@@ -139,10 +122,11 @@ Game >> assertGameHasNotFinished [
 
 { #category : #asserting }
 Game >> assertPlayerCanUseA: aCard [
-	aCard isPermanent & (self hasTheTurn: aCard owner) | aCard isTransient
-		ifTrue: [ ^ self ].
-	aCard owner addNewCard: aCard.
-	AssertionFailure signal: 'You cannot play a permanent card right now'
+	[ self assertPlayersTurn: aCard owner ]
+		on: AssertionFailure
+		do: [ aCard assertOwnerCanUseAnytime ].
+	aCard lastPlayedCards: cardsHistory.
+	cardsHistory addFirst: aCard
 ]
 
 { #category : #asserting }

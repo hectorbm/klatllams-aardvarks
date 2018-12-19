@@ -24,7 +24,7 @@ CardsTests >> testAccelerationCardAffectsAllPlayers [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	card := AccelerationCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
@@ -58,8 +58,8 @@ CardsTests >> testCancellationCanBeDoneIfAtLeast1PermanentCardIsActive [
 		totalLaps: 2.
 	card := SpeedCard ownedBy: playerOne.
 	cancellationCard := CancellationCard ownedBy: playerTwo.
-	playerOne addNewCard: card.
-	playerTwo addNewCard: cancellationCard.
+	playerOne addCard: card.
+	playerTwo addCard: cancellationCard.
 	self
 		should: [ playerTwo play: cancellationCard in: game cancelling: card ]
 			raise: AssertionFailure
@@ -103,9 +103,9 @@ CardsTests >> testCancellationCanBeDoneOnlyWithTheRightCard [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	acellerationCard := AccelerationCard ownedBy: playerOne.
-	playerOne addNewCard: acellerationCard.
+	playerOne addCard: acellerationCard.
 	speedUpCard := SpeedCard ownedBy: playerTwo.
-	playerTwo addNewCard: speedUpCard.
+	playerTwo addCard: speedUpCard.
 	self assert: (game hasTheTurn: playerOne).
 	playerOne play: acellerationCard in: game.
 	game move: playerOne.
@@ -141,8 +141,8 @@ CardsTests >> testCancellationCardAffectsAnotherCard [
 		totalLaps: 2.
 	card := SpeedCard ownedBy: playerOne.
 	cancellationCard := CancellationCard ownedBy: playerTwo.
-	playerOne addNewCard: card.
-	playerTwo addNewCard: cancellationCard.
+	playerOne addCard: card.
+	playerTwo addCard: cancellationCard.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
@@ -154,7 +154,7 @@ CardsTests >> testCancellationCardAffectsAnotherCard [
 	playerTwo
 		play: (playerTwo myCards first)
 		in: game
-		cancelling: (game activeCardsInfo first card).
+		cancelling: (game activeBoardCards first card).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 5.
 	self assert: (game hasTheTurn: playerTwo).
@@ -182,7 +182,7 @@ CardsTests >> testOverloadCardAffectsAPlayer [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	card := OverloadCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
@@ -211,7 +211,7 @@ CardsTests >> testPermanentCardCanBeUsedOnlyOnPlayerTurn [
 	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} boardComposedBy: spaces totalLaps: 2.
 	
 	card := SpeedCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
@@ -220,20 +220,20 @@ CardsTests >> testPermanentCardCanBeUsedOnlyOnPlayerTurn [
 		assert: (game hasTheTurn: playerTwo);
 		should: [ playerOne play: card in: game affecting: playerTwo ]
 			raise: AssertionFailure
-			withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot play a permanent card right now' ].
+			withExceptionDo: [ :signal | self assert: signal messageText equals: 'This is a permanent card' ].
 	
 	card := AccelerationCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	
 	self
 		assert: (game gameStatus positionOf: playerOne) equals: 3;
 		assert: (game hasTheTurn: playerTwo);
 		should: [ playerOne play: card in: game affecting: playerTwo ]
 			raise: AssertionFailure
-			withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot play a permanent card right now' ].
+			withExceptionDo: [ :signal | self assert: signal messageText equals: 'This is a permanent card' ].
 			
 	card := OverloadCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	
 	self
 		assert: (game gameStatus positionOf: playerOne) equals: 3;
@@ -263,9 +263,9 @@ CardsTests >> testRedoAccelerationCard [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	redoCard := RedoCard ownedBy: playerOne.
-	playerOne addNewCard: redoCard.
+	playerOne addCard: redoCard.
 	card := AccelerationCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
@@ -303,13 +303,13 @@ CardsTests >> testRedoCancellationCard [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	redoCard := RedoCard ownedBy: playerOne.
-	playerOne addNewCard: redoCard.
+	playerOne addCard: redoCard.
 	speedCard := SpeedCard ownedBy: playerOne.
-	playerOne addNewCard: speedCard.
+	playerOne addCard: speedCard.
 	cancellingCard := CancellationCard ownedBy: playerTwo.
-	playerTwo addNewCard: cancellingCard.
+	playerTwo addCard: cancellingCard.
 	overloadCard := OverloadCard ownedBy: playerTwo.
-	playerTwo addNewCard: overloadCard.
+	playerTwo addCard: overloadCard.
 	self assert: (game hasTheTurn: playerOne).
 	playerOne play: playerOne myCards first in: game affecting: playerTwo.
 	game move: playerOne.
@@ -322,12 +322,12 @@ CardsTests >> testRedoCancellationCard [
 	playerTwo
 		play: playerTwo myCards first
 		in: game
-		cancelling: game activeCardsInfo first card.
+		cancelling: game activeBoardCards first card.
 	game move: playerOne.
 	playerOne
 		play: playerOne myCards first
 		in: game
-		cancelling: game activeCardsInfo first card.
+		cancelling: game activeBoardCards first card.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
 	self assert: (game hasTheTurn: playerTwo).
 	game move: playerTwo.
@@ -357,12 +357,12 @@ CardsTests >> testRedoOnlyCanBeUsedIfAnotherCardWasPlayed [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	redoCard := RedoCard ownedBy: playerOne.
-	playerOne addNewCard: redoCard.
+	playerOne addCard: redoCard.
 	self
 		should: [ playerOne play: redoCard in: game affecting: playerTwo ]
 		raise: AssertionFailure
 		withExceptionDo:
-			[ :signal | self assert: signal messageText equals: 'Redo can be used if a Card was Used' ]
+			[ :signal | self assert: signal messageText equals: 'Redo only can be used if a Card was Used' ]
 ]
 
 { #category : #tests }
@@ -385,9 +385,9 @@ CardsTests >> testRedoOveloadCard [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	redoCard := RedoCard ownedBy: playerOne.
-	playerOne addNewCard: redoCard.
+	playerOne addCard: redoCard.
 	card := OverloadCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
@@ -425,10 +425,10 @@ CardsTests >> testRedoRedoAccelerationCard [
 		totalLaps: 2.
 	redoCard := RedoCard ownedBy: playerOne.
 	anotherRedo := RedoCard ownedBy: playerOne.
-	playerOne addNewCard: redoCard.
-	playerOne addNewCard: anotherRedo.
+	playerOne addCard: redoCard.
+	playerOne addCard: anotherRedo.
 	card := AccelerationCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	playerOne play: card in: game.
 	playerOne play: redoCard  in:  game.
@@ -460,10 +460,10 @@ CardsTests >> testRedoRedoRepeatCard [
 		totalLaps: 2.
 	redoCard := RedoCard ownedBy: playerOne.
 	anotherRedoCard := RedoCard ownedBy: playerOne.
-	playerOne addNewCard: redoCard.
-	playerOne addNewCard: anotherRedoCard.
+	playerOne addCard: redoCard.
+	playerOne addCard: anotherRedoCard.
 	card := RepeatCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
@@ -498,9 +498,9 @@ CardsTests >> testRedoRepeatCard [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	redoCard := RedoCard ownedBy: playerOne.
-	playerOne addNewCard: redoCard.
+	playerOne addCard: redoCard.
 	card := RepeatCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 4.
@@ -531,9 +531,9 @@ CardsTests >> testRedoSpeedCard [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	redoCard := RedoCard ownedBy: playerOne.
-	playerOne addNewCard: redoCard.
+	playerOne addCard: redoCard.
 	card := SpeedCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
@@ -571,7 +571,7 @@ CardsTests >> testRepeatCardAffectsAPlayer [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	card := RepeatCard ownedBy: playerTwo.
-	playerTwo addNewCard: card.
+	playerTwo addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 4.
@@ -600,7 +600,7 @@ CardsTests >> testRepeatCardAffectsAPlayerOnlyIfSpaceHasAnEffect [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	card := RepeatCard ownedBy: playerTwo.
-	playerTwo addNewCard: card.
+	playerTwo addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
@@ -630,7 +630,7 @@ CardsTests >> testRepeatCardOnlyAffectsAPlayerIfDicesWereRolled [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	card := RepeatCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
@@ -661,7 +661,7 @@ CardsTests >> testSpeedCardAffectsAPlayer [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	card := SpeedCard ownedBy: playerOne.
-	playerOne addNewCard: card.
+	playerOne addCard: card.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.

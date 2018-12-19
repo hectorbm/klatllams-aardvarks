@@ -39,13 +39,13 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 		boardComposedBy: spaces
 		totalLaps: 2.
 	playerOne
-		addNewCard: accelerationCard;
-		addNewCard: redoCard;
-		addNewCard: repeatCard.
+		addCard: accelerationCard;
+		addCard: redoCard;
+		addCard: repeatCard.
 	playerTwo
-		addNewCard: cancellationCard;
-		addNewCard: overloadCard;
-		addNewCard: speedCard.
+		addCard: cancellationCard;
+		addCard: overloadCard;
+		addCard: speedCard.
 	"The game starts"
 	playerOne play: accelerationCard in: game.	"allPlayers acceleration + 1"
 	self assert: (game gameStatus positionOf: playerOne) equals: 1.

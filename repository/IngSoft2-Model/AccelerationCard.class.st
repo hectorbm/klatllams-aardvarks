@@ -28,12 +28,18 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #accessing }
+AccelerationCard >> addOn: aBoard affecting: playersCollection [
+	aBoard addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
+]
+
 { #category : #affecting }
 AccelerationCard >> affect: aPlayer on: aBoard [
 	aBoard move: aPlayer by: 1
 ]
 
 { #category : #asserting }
-AccelerationCard >> isTransient [
-	^ false
+AccelerationCard >> assertOwnerCanUseAnytime [
+	owner addCard: self.
+	AssertionFailure signal: 'This is a permanent card'
 ]
