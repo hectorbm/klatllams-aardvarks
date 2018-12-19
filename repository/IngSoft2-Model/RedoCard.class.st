@@ -46,7 +46,7 @@ RedoCard >> addOn: aBoard affecting: otherGameObject [
 
 { #category : #affecting }
 RedoCard >> affect: aPlayer on: aBoard [
-	lastCard affect: aPlayer on: aBoard
+	lastCard affect: aPlayer on: aBoard 
 
 ]
 

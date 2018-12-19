@@ -98,14 +98,13 @@ Game >> activeBoardCards [
 
 { #category : #actions }
 Game >> add: aCard [
-	self assertPlayerCanUseA: aCard.
-	aCard addOn: board affecting: players elements
+	self add: aCard affecting: players elements
 ]
 
 { #category : #actions }
-Game >> add: aCard affecting: aPlayer [
+Game >> add: aCard affecting: otherPlayers [
 	self assertPlayerCanUseA: aCard.
-	aCard addOn: board affecting: aPlayer
+	aCard addOn: board affecting: otherPlayers
 ]
 
 { #category : #actions }
