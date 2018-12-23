@@ -38,5 +38,6 @@ Class {
 CardSpace >> affect: aPlayer on: aBoard [
 	| aCard |
 	aCard := Card subclasses atRandom ownedBy: aPlayer.
+	aBoard addValidCard: aCard.
 	aPlayer addCard: aCard
 ]
