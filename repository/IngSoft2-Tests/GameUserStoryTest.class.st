@@ -13,12 +13,6 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
 	playerOne := Player named: 'Hector'.
 	playerTwo := Player named: 'Ignacio'.
-	accelerationCard := AccelerationCard ownedBy: playerOne.
-	redoCard := RedoCard ownedBy: playerOne.
-	repeatCard := RepeatCard ownedBy: playerOne.
-	cancellationCard := CancellationCard ownedBy: playerTwo.
-	overloadCard := OverloadCard ownedBy: playerTwo.
-	speedCard := SpeedCard ownedBy: playerTwo.
 	spaces := {NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
@@ -38,6 +32,18 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 			diceTwo}
 		boardComposedBy: spaces
 		totalLaps: 2.
+	accelerationCard := AccelerationCard ownedBy: playerOne.
+	game board addValidCard: accelerationCard.
+	redoCard := RedoCard ownedBy: playerOne.
+	game board addValidCard: redoCard.
+	repeatCard := RepeatCard ownedBy: playerOne.
+	game board addValidCard: repeatCard.
+	cancellationCard := CancellationCard ownedBy: playerTwo.
+	game board addValidCard: cancellationCard.
+	overloadCard := OverloadCard ownedBy: playerTwo.
+	game board addValidCard: overloadCard.
+	speedCard := SpeedCard ownedBy: playerTwo.
+	game board addValidCard: speedCard.
 	playerOne
 		addCard: accelerationCard;
 		addCard: redoCard;

@@ -121,6 +121,7 @@ Game >> assertGameHasNotFinished [
 
 { #category : #asserting }
 Game >> assertPlayerCanUseA: aCard [
+	board assertIsAValidCard: aCard.
 	[ self assertPlayersTurn: aCard owner ]
 		on: AssertionFailure
 		do: [ aCard assertOwnerCanUseAnytime ].
@@ -132,6 +133,11 @@ Game >> assertPlayerCanUseA: aCard [
 Game >> assertPlayersTurn: aPlayer [
 	(self hasTheTurn: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'You cannot play now!' ]
+]
+
+{ #category : #accessing }
+Game >> board [
+	^ board
 ]
 
 { #category : #accessing }

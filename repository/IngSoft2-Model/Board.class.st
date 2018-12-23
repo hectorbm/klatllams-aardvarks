@@ -28,6 +28,7 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
+		'validCards',
 		'spaces',
 		'gameStatus',
 		'landingPlayerPositions',
@@ -98,6 +99,18 @@ Board >> addAnActive: cardPlayerAffected [
 	activeCardsPlayerAffected add: cardPlayerAffected 
 ]
 
+{ #category : #updating }
+Board >> addValidCard: aCard [
+	validCards add: aCard
+]
+
+{ #category : #asserting }
+Board >> assertIsAValidCard: aCard [
+	validCards
+		detect: [ :card | card = aCard ]
+		ifNone: [ AssertionFailure signal: 'Not a valid card' ]
+]
+
 { #category : #accessing }
 Board >> gameStatus [
 	^ gameStatus
@@ -109,6 +122,7 @@ Board >> initializePlayedBy: aPlayersCollection composedBy: aSpacesCollection [
 	gameStatus := GameStatus players: aPlayersCollection.
 	landingPlayerPositions := OrderedCollection new.
 	activeCardsPlayerAffected := OrderedCollection new.
+	validCards := OrderedCollection new.
 ]
 
 { #category : #accessing }
