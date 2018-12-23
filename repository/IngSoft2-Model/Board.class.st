@@ -31,7 +31,7 @@ Class {
 		'spaces',
 		'gameStatus',
 		'landingPlayerPositions',
-		'activeCardsInfo'
+		'activeCardsPlayerAffected'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -77,7 +77,7 @@ Board class >> generateRandomSpaceDistributionWith: aQuantity [
 { #category : #'instance creation' }
 Board class >> playedBy: aPlayersCollection composedBy: aSpacesCollection [
 	self assertMinimumQuantityOf: aSpacesCollection .
-	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCollection
+	^ self new initializePlayedBy: aPlayersCollection composedBy: aSpacesCollection
 ]
 
 { #category : #'instance creation' }
@@ -85,17 +85,17 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 	| spacesCollection |
 	self assertValidSpacesQuantity: aQuantity.
 	spacesCollection := self generateRandomSpaceDistributionWith: aQuantity.
-	^ self new initializePlayedBy: aPlayersCollection initializeComposedBy: spacesCollection
+	^ self new initializePlayedBy: aPlayersCollection composedBy: spacesCollection
 ]
 
 { #category : #accessing }
 Board >> activeBoardCards [
-	^ activeCardsInfo
+	^ activeCardsPlayerAffected
 ]
 
 { #category : #updating }
-Board >> addAnActive: cardInfo [
-	activeCardsInfo add: cardInfo 
+Board >> addAnActive: cardPlayerAffected [
+	activeCardsPlayerAffected add: cardPlayerAffected 
 ]
 
 { #category : #accessing }
@@ -104,11 +104,11 @@ Board >> gameStatus [
 ]
 
 { #category : #initialization }
-Board >> initializePlayedBy: aPlayersCollection initializeComposedBy: aSpacesCollection [
+Board >> initializePlayedBy: aPlayersCollection composedBy: aSpacesCollection [
 	spaces := aSpacesCollection.
 	gameStatus := GameStatus players: aPlayersCollection.
 	landingPlayerPositions := OrderedCollection new.
-	activeCardsInfo := OrderedCollection new.
+	activeCardsPlayerAffected := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -133,7 +133,7 @@ Board >> move: aPlayer by: aQuantity [
 
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
-	activeCardsInfo
+	activeCardsPlayerAffected
 		select: [ :cardInfo | cardInfo affected: aPlayer ]
 		thenDo: [ :cardInfo | cardInfo card affect: aPlayer on: self ].
 	self move: aPlayer by: aValue.
@@ -143,9 +143,9 @@ Board >> moveAndAffect: aPlayer by: aValue [
 
 { #category : #updating }
 Board >> removeAnActive: card [
-	activeCardsInfo
-		detect: [ :cardInfo | cardInfo card = card ]
-		ifFound: [ :cardInfo | activeCardsInfo remove: cardInfo ]
+	activeCardsPlayerAffected
+		detect: [ :cardPlayerAffected | cardPlayerAffected card = card ]
+		ifFound: [ :cardInfo | activeCardsPlayerAffected remove: cardInfo ]
 ]
 
 { #category : #accessing }

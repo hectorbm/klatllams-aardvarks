@@ -47,8 +47,9 @@ GameStatus >> gamePositionOf: aPlayer [
 GameStatus >> initializeWithPlayers: playersCollection [
 	| playerHistory |
 	playersHistories := playersCollection
-		collect: [ :each | playerHistory := PlayerHistory player: each.
-								playerHistory updatePlayerTo:1 withLaps: 0 ]
+		collect: [ :each | 
+			playerHistory := PlayerHistory player: each.
+			playerHistory updatePlayerTo: 1 withLaps: 0 ]
 ]
 
 { #category : #accesing }

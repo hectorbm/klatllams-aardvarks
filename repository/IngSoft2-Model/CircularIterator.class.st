@@ -43,12 +43,12 @@ CircularIterator class >> assertNotEmpty: aCollection [
 { #category : #'instance creation' }
 CircularIterator class >> contains: aCollection [
 	self assertNotEmpty: aCollection.
-	^ self new initializeContaining: aCollection initializeStartingAt: 0
+	^ self new initializeContaining: aCollection startingAt: 0
 ]
 
 { #category : #'instance creation' }
 CircularIterator class >> contains: aCollection startingAt: aPosition [ 
-	^self new initializeContaining: aCollection initializeStartingAt: aPosition
+	^self new initializeContaining: aCollection startingAt: aPosition
 ]
 
 { #category : #accessing }
@@ -57,7 +57,7 @@ CircularIterator >> elements [
 ]
 
 { #category : #initialization }
-CircularIterator >> initializeContaining: aCollection initializeStartingAt: aPosition [
+CircularIterator >> initializeContaining: aCollection startingAt: aPosition [
 	elements := aCollection.
 	currentPosition := aPosition.
 	turns := 0
