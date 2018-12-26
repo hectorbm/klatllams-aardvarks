@@ -98,7 +98,7 @@ Game >> activeBoardCards [
 
 { #category : #actions }
 Game >> add: aCard [
-	self add: aCard affecting: players elements
+	self add: aCard affecting: players elements 
 ]
 
 { #category : #actions }

@@ -32,7 +32,8 @@ Class {
 		'spaces',
 		'gameStatus',
 		'landingPlayerPositions',
-		'activeCardsPlayerAffected'
+		'removedCards',
+		'activeCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -91,12 +92,17 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity [
 
 { #category : #accessing }
 Board >> activeBoardCards [
-	^ activeCardsPlayerAffected
+	^ activeCards
 ]
 
 { #category : #updating }
 Board >> addAnActive: cardPlayerAffected [
-	activeCardsPlayerAffected add: cardPlayerAffected 
+	activeCards add: cardPlayerAffected 
+]
+
+{ #category : #updating }
+Board >> addToRemovedCards: aCard [
+	removedCards add: aCard
 ]
 
 { #category : #updating }
@@ -121,8 +127,9 @@ Board >> initializePlayedBy: aPlayersCollection composedBy: aSpacesCollection [
 	spaces := aSpacesCollection.
 	gameStatus := GameStatus players: aPlayersCollection.
 	landingPlayerPositions := OrderedCollection new.
-	activeCardsPlayerAffected := OrderedCollection new.
+	activeCards := OrderedCollection new.
 	validCards := OrderedCollection new.
+	removedCards := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -147,7 +154,7 @@ Board >> move: aPlayer by: aQuantity [
 
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
-	activeCardsPlayerAffected
+	activeCards
 		select: [ :cardInfo | cardInfo affected: aPlayer ]
 		thenDo: [ :cardInfo | cardInfo card affect: aPlayer on: self ].
 	self move: aPlayer by: aValue.
@@ -157,9 +164,11 @@ Board >> moveAndAffect: aPlayer by: aValue [
 
 { #category : #updating }
 Board >> removeAnActive: card [
-	activeCardsPlayerAffected
+	activeCards
 		detect: [ :cardPlayerAffected | cardPlayerAffected card = card ]
-		ifFound: [ :cardInfo | activeCardsPlayerAffected remove: cardInfo ]
+		ifFound: [ :cardPlayerAffected | 
+			activeCards remove: cardPlayerAffected.
+			self addToRemovedCards: cardPlayerAffected card]
 ]
 
 { #category : #accessing }

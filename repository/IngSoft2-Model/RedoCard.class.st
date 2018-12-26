@@ -40,14 +40,14 @@ RedoCard >> addLastCard: aCard [
 ]
 
 { #category : #adding }
-RedoCard >> addOn: aBoard affecting: otherGameObject [
-	lastCard addOn: aBoard affecting: otherGameObject
+RedoCard >> addOn: aBoard affecting: playersCollection [
+	lastCard addOn: aBoard affecting: playersCollection
 ]
 
 { #category : #affecting }
 RedoCard >> affect: aPlayer on: aBoard [
-	lastCard affect: aPlayer on: aBoard 
-
+	lastCard affect: aPlayer on: aBoard.
+	aBoard addToRemovedCards: self
 ]
 
 { #category : #asserting }
@@ -56,8 +56,8 @@ RedoCard >> assertOwnerCanUseAnytime [
 
 { #category : #affecting }
 RedoCard >> cancel: otherCard on: aBoard [
-	lastCard cancel: otherCard on: aBoard
-
+	lastCard cancel: otherCard on: aBoard.
+	aBoard addToRemovedCards: self
 ]
 
 { #category : #initialization }
