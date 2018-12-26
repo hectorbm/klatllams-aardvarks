@@ -57,7 +57,7 @@ MoonWalkSpace class >> generateValidBackwardsValue [
 
 { #category : #action }
 MoonWalkSpace >> affect: aPlayer on: board [
-	board gameStatus players do: [ :each | board move: each by: backwardsValue ] without: aPlayer
+	board gameStatus players do: [ :each | board calculateAndUpdate: each by: backwardsValue ] without: aPlayer
 ]
 
 { #category : #initialization }

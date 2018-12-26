@@ -27,5 +27,5 @@ Class {
 
 { #category : #action }
 WormHoleSpace >> affect: aPlayer on: board [ 
-	board move: aPlayer by: -4.
+	board calculateAndUpdate: aPlayer by: -4.
 ]

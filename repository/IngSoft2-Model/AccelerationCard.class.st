@@ -31,13 +31,12 @@ Class {
 { #category : #adding }
 AccelerationCard >> addOn: aBoard affecting: playersCollection [
 	self assertAffectedPlayerQuantity: playersCollection on: aBoard.
-	aBoard
-		addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
+	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
 ]
 
 { #category : #affecting }
 AccelerationCard >> affect: aPlayer on: aBoard [
-	aBoard move: aPlayer by: 1
+	aBoard calculateAndUpdate: aPlayer by: 1
 ]
 
 { #category : #asserting }

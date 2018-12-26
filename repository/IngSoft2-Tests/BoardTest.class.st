@@ -42,7 +42,7 @@ BoardTest >> testAPlayerCanMoveOnTheBoardAndIsTheTopPlayer [
 	| board spaces |
 	spaces := BoardTest createNoEffectSpacesCollection.	
 	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
-	board move: 'hector' by: 5.
+	board calculateAndUpdate: 'hector' by: 5.
 	self assert: board gameStatus topPlayer equals: 'hector'.
 	self assert:( board gameStatus positionOf: 'hector') equals: 6
 ]
@@ -54,13 +54,13 @@ BoardTest >> testAPlayerCanMoveToANegativeLapAndMoreThanOneLap [
 	self assert: spaces size equals: 8.
 	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
 	self assert: (board gameStatus positionOf: 'hector') equals: 1 .
-	board move: 'hector' by: -1.
+	board calculateAndUpdate: 'hector' by: -1.
 	self assert:( board gameStatus positionOf: 'hector') equals: 8;
 		  assert:( board gameStatus lapsOf: 'hector') equals: -1.
-	board move: 'hector' by: 8.
+	board calculateAndUpdate: 'hector' by: 8.
 	self assert:( board gameStatus positionOf: 'hector') equals: 8;
 	     assert:( board gameStatus lapsOf: 'hector') equals: 0.
-	board move: 'hector'  by: 10.
+	board calculateAndUpdate: 'hector'  by: 10.
 	self assert:( board gameStatus positionOf: 'hector') equals: 2;
 	     assert:( board gameStatus lapsOf: 'hector') equals: 2.
 ]

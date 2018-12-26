@@ -37,7 +37,14 @@ Class {
 { #category : #action }
 CardSpace >> affect: aPlayer on: aBoard [
 	| aCard |
-	aCard := Card subclasses atRandom ownedBy: aPlayer.
-	aBoard addValidCard: aCard.
+	self assertCanExtractFromDeckOf: aBoard.
+	aCard := aBoard deck deliverNewCard.
 	aPlayer addCard: aCard
+]
+
+{ #category : #asserting }
+CardSpace >> assertCanExtractFromDeckOf: aBoard [
+	aBoard deck removedCards isEmpty
+		ifTrue: [ AssertionFailure
+				signal: 'You must wait until there is at least 1 removed card' ]
 ]

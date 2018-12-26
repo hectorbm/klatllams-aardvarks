@@ -44,10 +44,9 @@ CancellationCard >> assertOwnerCanUseAnytime [
 
 { #category : #affecting }
 CancellationCard >> cancel: otherCard on: aBoard [
-	aBoard activeBoardCards isEmpty
+	aBoard deck activeCardsPlayerAffected isEmpty
 		ifTrue: [ owner addCard: self.
-			AssertionFailure
-				signal: 'You cannot play a canceling card when there are no active cards.' ].
-	aBoard removeAnActive: otherCard.
-	aBoard addToRemovedCards: self
+			AssertionFailure signal: 'You cannot play a canceling card when there are no active cards.' ].
+	aBoard deck removeAnActive: otherCard.
+	aBoard deck addToRemovedCards: self
 ]
