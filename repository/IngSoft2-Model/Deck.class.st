@@ -116,9 +116,10 @@ Deck >> deliverNewCard [
 { #category : #initialization }
 Deck >> initializeWithCards: aCardsCollection [
 	availableCards := aCardsCollection.
-	validCards := aCardsCollection.
+	validCards := OrderedCollection new.
+	validCards addAll: availableCards.
 	removedCards := OrderedCollection new.
-	activeCardsPlayerAffected := OrderedCollection new.
+	activeCardsPlayerAffected := OrderedCollection new
 ]
 
 { #category : #updating }
