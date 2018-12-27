@@ -115,7 +115,8 @@ Deck >> deliverNewCard [
 
 { #category : #initialization }
 Deck >> initializeWithCards: aCardsCollection [
-	availableCards := aCardsCollection.
+	availableCards := OrderedCollection new.
+	availableCards addAll: aCardsCollection.
 	validCards := OrderedCollection new.
 	validCards addAll: availableCards.
 	removedCards := OrderedCollection new.

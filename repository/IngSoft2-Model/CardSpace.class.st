@@ -39,6 +39,7 @@ CardSpace >> affect: aPlayer on: aBoard [
 	| aCard |
 	self assertCanExtractFromDeckOf: aBoard.
 	aCard := aBoard deck deliverNewCard.
+	aCard updateOwner: aPlayer.
 	aPlayer addCard: aCard
 ]
 

@@ -47,6 +47,6 @@ AccelerationCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
 
 { #category : #asserting }
 AccelerationCard >> assertOwnerCanUseAnytime [
-	owner addCard: self.
+	owner first addCard: self.
 	AssertionFailure signal: 'This is a permanent card'
 ]

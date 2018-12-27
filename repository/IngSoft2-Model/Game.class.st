@@ -116,7 +116,7 @@ Game >> assertGameHasNotFinished [
 
 { #category : #asserting }
 Game >> assertPlayerCanUseA: card [
-	board assertIsAValidCard: card.
+	board deck assertIsAValid: card.
 	[ self assertPlayersTurn: card owner ]
 		on: AssertionFailure
 		do: [ card assertOwnerCanUseAnytime ].
@@ -149,13 +149,18 @@ Game >> hasTheTurn: aPlayer [
 
 { #category : #initialization }
 Game >> initializePlayedBy: aPlayersCollection throwing: aDicesCollection playedOn: aBoard withTotalLaps: aQuantity [
+	| card |
 	players := CircularIterator contains: aPlayersCollection.
 	dices := aDicesCollection.
 	board := aBoard.
 	currentPlayer := players nextBy: 1.
 	laps := aQuantity.
 	cardsHistory := OrderedCollection new.
-	aPlayersCollection do: [ :player | 2 timesRepeat: [ board deck deliverNewCard ] ]
+	aPlayersCollection
+		do: [ :player | 
+			2 timesRepeat: [ card := board deck deliverNewCard.
+					card updateOwner: player.
+					player addCard: card ] ]
 ]
 
 { #category : #actions }

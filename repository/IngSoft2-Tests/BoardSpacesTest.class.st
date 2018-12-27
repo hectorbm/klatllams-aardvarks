@@ -18,38 +18,41 @@ BoardSpacesTest >> testAMoonWalkSpaceCannotHaveABackwardsValueLessThan1OrMoreTha
 
 { #category : #tests }
 BoardSpacesTest >> testAMoonWalkSpaceWithBackwardsValue4MovesPlayerBackwardsBy4 [
-	| board spaces |
+	| board spaces deck |
+	deck := Deck composedByCardsQuantity: 10.
 	spaces := {NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	(MoonWalkSpace backwardsValue: 4)}.
-	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
+	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces using: deck.
 	board moveAndAffect: 'hector' by: 4.
 	board moveAndAffect: 'ignacio' by: 5.
-	self assert: (board gameStatus positionOf: 'hector') equals: 1.
+	self assert: (board gameStatus positionOf: 'hector') equals: 1
 ]
 
 { #category : #tests }
 BoardSpacesTest >> testANoEffectSpaceCannotChangeAPlayerPosition [
-	| board spaces |
-	spaces := BoardTest createNoEffectSpacesCollection  	.
-	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
+	| board spaces deck |
+	deck := Deck composedByCardsQuantity: 10.
+	spaces := BoardTest createNoEffectSpacesCollection.
+	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces using: deck.
 	board moveAndAffect: 'hector' by: 5.
-   self assert: (board gameStatus positionOf: 'hector') equals: 6
+	self assert: (board gameStatus positionOf: 'hector') equals: 6
 ]
 
 { #category : #tests }
 BoardSpacesTest >> testAtomicBombSpaceAndMoveEveryOneToInitialPosition [
-	| board spaces |
+	| board spaces deck |
+	deck := Deck composedByCardsQuantity: 10.
 	spaces := {NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	AtomicBombSpace new}.
-	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
+	board := Board playedBy:#('hector' 'ignacio') composedBy:spaces using:deck.
 	board moveAndAffect: 'hector' by: 4.
 	board moveAndAffect: 'ignacio' by: 5.
 	self
@@ -59,15 +62,20 @@ BoardSpacesTest >> testAtomicBombSpaceAndMoveEveryOneToInitialPosition [
 
 { #category : #tests }
 BoardSpacesTest >> testCardSpaceAssignsACardToAPlayer [
-	| spaces players board card |
+	| spaces players board card deck|
+	card:= AccelerationCard new.
+	deck := Deck composedBy:{card}asOrderedCollection.
 	spaces := {CardSpace new.
 	CardSpace new.
 	CardSpace new.
 	CardSpace new.
 	CardSpace new.
 	CardSpace new} asOrderedCollection.
-	players := {Player named: 'Carrot' . Player named: 'Nacho'} asOrderedCollection .
-	board := Board playedBy: players composedBy: spaces.
+	players := { Player named:'Carrot' . Player named:'Nacho'} asOrderedCollection .
+	board := Board playedBy: players composedBy: spaces using: deck.
+	card updateOwner: (players second).
+	board deck addAnActive:(CardPlayerAffected withCard: card affecting: players ).
+	board deck removeAnActive: card.
 	(spaces first) affect: players first on: board.
 	card := (players first) myCards first.
 	self assert: (card owner) equals: (players first)
@@ -76,14 +84,15 @@ BoardSpacesTest >> testCardSpaceAssignsACardToAPlayer [
 
 { #category : #tests }
 BoardSpacesTest >> testSpeedUpHoleSpaceAndMoveAPlayerForwardsBy4 [
-	| board spaces |
+	| board spaces deck |
+	deck := Deck composedByCardsQuantity: 10.
 	spaces := {NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	SpeedUpSpace new}.
-	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
+	board := Board playedBy:#('hector' 'ignacio') composedBy:spaces using:deck.
 	board moveAndAffect: 'hector' by: 4.
 	board moveAndAffect: 'ignacio' by: 5.
 	self
@@ -92,15 +101,16 @@ BoardSpacesTest >> testSpeedUpHoleSpaceAndMoveAPlayerForwardsBy4 [
 ]
 
 { #category : #tests }
-BoardSpacesTest >> testWarmHoleSpaceAndMoveAPlayerBackwardsBy4 [
-	| board spaces |
+BoardSpacesTest >> testWormHoleSpaceAndMoveAPlayerBackwardsBy4 [
+	| board spaces deck |
+	deck := Deck composedByCardsQuantity: 10.
 	spaces := {NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
 	WormHoleSpace new}.
-	board := Board playedBy: #('hector' 'ignacio') composedBy: spaces.
+	board := Board playedBy:#('hector' 'ignacio') composedBy:spaces using:deck.
 	board moveAndAffect: 'hector' by: 4.
 	board moveAndAffect: 'ignacio' by: 5.
 	self

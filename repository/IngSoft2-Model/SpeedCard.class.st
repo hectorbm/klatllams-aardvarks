@@ -47,6 +47,6 @@ SpeedCard >> assertAffectedPlayerQuantity: playersCollection [
 
 { #category : #asserting }
 SpeedCard >> assertOwnerCanUseAnytime [
-	owner addCard: self.
+	owner first addCard: self.
 	AssertionFailure signal: 'This is a permanent card'
 ]
