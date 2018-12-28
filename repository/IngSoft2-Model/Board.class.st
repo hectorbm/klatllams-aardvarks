@@ -28,12 +28,10 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'validCards',
+		'deck',
 		'spaces',
 		'gameStatus',
-		'landingPlayerPositions',
-		'removedCards',
-		'activeCards'
+		'landingPlayerPositions'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -77,44 +75,34 @@ Board class >> generateRandomSpaceDistributionWith: aQuantity [
 ]
 
 { #category : #'instance creation' }
-Board class >> playedBy: aPlayersCollection composedBy: aSpacesCollection [
+Board class >> playedBy: aPlayersCollection composedBy: aSpacesCollection using: aDeck [
 	self assertMinimumQuantityOf: aSpacesCollection .
-	^ self new initializePlayedBy: aPlayersCollection composedBy: aSpacesCollection
+	^ self new initializePlayedBy: aPlayersCollection composedBy: aSpacesCollection using: aDeck
 ]
 
 { #category : #'instance creation' }
-Board class >> playedBy: aPlayersCollection spaces: aQuantity [
+Board class >> playedBy: aPlayersCollection spaces: aQuantity using: aDeck [
 	| spacesCollection |
 	self assertValidSpacesQuantity: aQuantity.
 	spacesCollection := self generateRandomSpaceDistributionWith: aQuantity.
-	^ self new initializePlayedBy: aPlayersCollection composedBy: spacesCollection
+	^ self new initializePlayedBy: aPlayersCollection composedBy: spacesCollection using: aDeck
+]
+
+{ #category : #updating }
+Board >> calculateAndUpdate: aPlayer by: aQuantity [
+	| positionsCircularIterator |
+	positionsCircularIterator := CircularIterator
+		contains: (1 to: spaces size) asOrderedCollection
+		startingAt: (gameStatus positionOf: aPlayer).
+	gameStatus
+		updatePositionAndLapsOf: aPlayer
+		to: (positionsCircularIterator nextBy: aQuantity)
+		adding: positionsCircularIterator turns + (gameStatus lapsOf: aPlayer)
 ]
 
 { #category : #accessing }
-Board >> activeBoardCards [
-	^ activeCards
-]
-
-{ #category : #updating }
-Board >> addAnActive: cardPlayerAffected [
-	activeCards add: cardPlayerAffected 
-]
-
-{ #category : #updating }
-Board >> addToRemovedCards: aCard [
-	removedCards add: aCard
-]
-
-{ #category : #updating }
-Board >> addValidCard: aCard [
-	validCards add: aCard
-]
-
-{ #category : #asserting }
-Board >> assertIsAValidCard: aCard [
-	validCards
-		detect: [ :card | card = aCard ]
-		ifNone: [ AssertionFailure signal: 'Not a valid card' ]
+Board >> deck [
+	^ deck
 ]
 
 { #category : #accessing }
@@ -123,13 +111,13 @@ Board >> gameStatus [
 ]
 
 { #category : #initialization }
-Board >> initializePlayedBy: aPlayersCollection composedBy: aSpacesCollection [
+Board >> initializePlayedBy: aPlayersCollection composedBy: aSpacesCollection using: aDeck [
 	spaces := aSpacesCollection.
 	gameStatus := GameStatus players: aPlayersCollection.
 	landingPlayerPositions := OrderedCollection new.
-	activeCards := OrderedCollection new.
-	validCards := OrderedCollection new.
-	removedCards := OrderedCollection new.
+	deck := aDeck
+
+	
 ]
 
 { #category : #accessing }
@@ -141,34 +129,13 @@ Board >> lastLandingPositionOf: aPlayer [
 ]
 
 { #category : #action }
-Board >> move: aPlayer by: aQuantity [
-	| positionsCircularIterator |
-	positionsCircularIterator := CircularIterator
-		contains: (1 to: spaces size) asOrderedCollection
-		startingAt: (gameStatus positionOf: aPlayer).
-	gameStatus
-		updatePositionAndLapsOf: aPlayer
-		to: (positionsCircularIterator nextBy: aQuantity)
-		adding: positionsCircularIterator turns + (gameStatus lapsOf: aPlayer)
-]
-
-{ #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
-	activeCards
+	deck activeCardsPlayerAffected
 		select: [ :cardInfo | cardInfo affected: aPlayer ]
 		thenDo: [ :cardInfo | cardInfo card affect: aPlayer on: self ].
-	self move: aPlayer by: aValue.
+	self calculateAndUpdate: aPlayer by: aValue.
 	self updateLastLandingTo: (gameStatus positionOf: aPlayer) of: aPlayer.
 	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self
-]
-
-{ #category : #updating }
-Board >> removeAnActive: card [
-	activeCards
-		detect: [ :cardPlayerAffected | cardPlayerAffected card = card ]
-		ifFound: [ :cardPlayerAffected | 
-			activeCards remove: cardPlayerAffected.
-			self addToRemovedCards: cardPlayerAffected card]
 ]
 
 { #category : #accessing }

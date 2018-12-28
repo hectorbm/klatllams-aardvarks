@@ -47,7 +47,7 @@ RedoCard >> addOn: aBoard affecting: playersCollection [
 { #category : #affecting }
 RedoCard >> affect: aPlayer on: aBoard [
 	lastCard affect: aPlayer on: aBoard.
-	aBoard addToRemovedCards: self
+	aBoard deck addToRemovedCards: self
 ]
 
 { #category : #asserting }
@@ -57,12 +57,12 @@ RedoCard >> assertOwnerCanUseAnytime [
 { #category : #affecting }
 RedoCard >> cancel: otherCard on: aBoard [
 	lastCard cancel: otherCard on: aBoard.
-	aBoard addToRemovedCards: self
+	aBoard deck addToRemovedCards: self
 ]
 
 { #category : #initialization }
-RedoCard >> initializeOwnedBy: aPlayer [
-	owner := aPlayer.
+RedoCard >> initialize [
+	owner := OrderedCollection new.
 	lastCardIsSet := false
 ]
 

@@ -58,9 +58,9 @@ Game class >> assertMinimumPlayersQuantity: aPlayersCollection [
 ]
 
 { #category : #'instance creation' }
-Game class >> playedBy: aPlayersCollection throwing: aDicesCollection boardComposedBy: aSpacesCollection totalLaps: aLapsQuantity [
+Game class >> playedBy: aPlayersCollection throwing: aDicesCollection boardComposedBy: aSpacesCollection totalLaps: aLapsQuantity using: aDeck [
 	| board |
-	board := Board playedBy: aPlayersCollection composedBy: aSpacesCollection.
+	board := Board playedBy: aPlayersCollection composedBy: aSpacesCollection using: aDeck.
 	^ self
 		playedBy: aPlayersCollection
 		throwing: aDicesCollection
@@ -81,19 +81,14 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection playedOn: 
 ]
 
 { #category : #'instance creation' }
-Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aSpacesQuantity totalLaps: aLapsQuantity [
+Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aSpacesQuantity totalLaps: aLapsQuantity using: aDeck [
 	| board |
-	board := Board playedBy: aPlayersCollection spaces: aSpacesQuantity.
+	board := Board playedBy: aPlayersCollection spaces: aSpacesQuantity using: aDeck.
 	^ self
 		playedBy: aPlayersCollection
 		throwing: aDicesCollection
 		playedOn: board
 		totalLaps: aLapsQuantity
-]
-
-{ #category : #accessing }
-Game >> activeBoardCards [
-	^ board activeBoardCards
 ]
 
 { #category : #actions }
@@ -120,24 +115,19 @@ Game >> assertGameHasNotFinished [
 ]
 
 { #category : #asserting }
-Game >> assertPlayerCanUseA: aCard [
-	board assertIsAValidCard: aCard.
-	[ self assertPlayersTurn: aCard owner ]
+Game >> assertPlayerCanUseA: card [
+	board deck assertIsAValid: card.
+	[ self assertPlayersTurn: card owner ]
 		on: AssertionFailure
-		do: [ aCard assertOwnerCanUseAnytime ].
-	aCard lastPlayedCards: cardsHistory.
-	cardsHistory addFirst: aCard
+		do: [ card assertOwnerCanUseAnytime ].
+	card lastPlayedCards: cardsHistory.
+	cardsHistory addFirst: card
 ]
 
 { #category : #asserting }
 Game >> assertPlayersTurn: aPlayer [
 	(self hasTheTurn: aPlayer)
 		ifFalse: [ AssertionFailure signal: 'You cannot play now!' ]
-]
-
-{ #category : #accessing }
-Game >> board [
-	^ board
 ]
 
 { #category : #accessing }
@@ -159,16 +149,18 @@ Game >> hasTheTurn: aPlayer [
 
 { #category : #initialization }
 Game >> initializePlayedBy: aPlayersCollection throwing: aDicesCollection playedOn: aBoard withTotalLaps: aQuantity [
-	| aCardSpace |
+	| card |
 	players := CircularIterator contains: aPlayersCollection.
 	dices := aDicesCollection.
 	board := aBoard.
 	currentPlayer := players nextBy: 1.
 	laps := aQuantity.
 	cardsHistory := OrderedCollection new.
-	aCardSpace := CardSpace new.
 	aPlayersCollection
-		do: [ :player | 2 timesRepeat: [ aCardSpace affect: player on: board ] ]
+		do: [ :player | 
+			2 timesRepeat: [ card := board deck deliverNewCard.
+					card updateOwner: player.
+					player addCard: card ] ]
 ]
 
 { #category : #actions }

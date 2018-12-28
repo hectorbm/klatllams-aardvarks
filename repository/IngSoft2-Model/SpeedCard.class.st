@@ -31,13 +31,12 @@ Class {
 { #category : #adding }
 SpeedCard >> addOn: aBoard affecting: playersCollection [
 	self assertAffectedPlayerQuantity: playersCollection.
-	aBoard
-		addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
+	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
 ]
 
 { #category : #affecting }
 SpeedCard >> affect: aPlayer on: aBoard [
-	aBoard move: aPlayer by: 1
+	aBoard calculateAndUpdate: aPlayer by: 1
 ]
 
 { #category : #asserting }
@@ -48,6 +47,6 @@ SpeedCard >> assertAffectedPlayerQuantity: playersCollection [
 
 { #category : #asserting }
 SpeedCard >> assertOwnerCanUseAnytime [
-	owner addCard: self.
+	owner first addCard: self.
 	AssertionFailure signal: 'This is a permanent card'
 ]

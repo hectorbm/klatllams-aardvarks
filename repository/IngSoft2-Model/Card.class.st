@@ -28,11 +28,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-Card class >> ownedBy: aPlayer [
-	^ self new initializeOwnedBy: aPlayer.
-]
-
 { #category : #adding }
 Card >> addOn: aBoard affecting: playersCollection [
 	^ self subclassResponsibility
@@ -59,8 +54,8 @@ Card >> cancel: otherCard on: aBoard [
 ]
 
 { #category : #initialization }
-Card >> initializeOwnedBy: aPlayer [
-	owner := aPlayer
+Card >> initialize [
+	owner := OrderedCollection new
 ]
 
 { #category : #updating }
@@ -70,5 +65,10 @@ Card >> lastPlayedCards: aCardsCollection [
 
 { #category : #accessing }
 Card >> owner [
-	^ owner
+	^ owner first.
+]
+
+{ #category : #updating }
+Card >> updateOwner: aPlayer [
+	owner addFirst: aPlayer.
 ]

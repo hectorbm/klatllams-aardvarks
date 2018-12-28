@@ -31,13 +31,12 @@ Class {
 { #category : #adding }
 OverloadCard >> addOn: aBoard affecting: playersCollection [
 	self assertAffectedPlayerQuantity: playersCollection.
-	aBoard
-		addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
+	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
 ]
 
 { #category : #affecting }
 OverloadCard >> affect: aPlayer on: aBoard [
-	aBoard move: aPlayer by: 2 negated
+	aBoard calculateAndUpdate: aPlayer by: 2 negated
 ]
 
 { #category : #asserting }
@@ -48,6 +47,6 @@ OverloadCard >> assertAffectedPlayerQuantity: playersCollection [
 
 { #category : #asserting }
 OverloadCard >> assertOwnerCanUseAnytime [
-	owner addCard: self.
+	owner first addCard: self.
 	AssertionFailure signal: 'You cannot play a permanent card right now'
 ]

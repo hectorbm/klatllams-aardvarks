@@ -44,7 +44,7 @@ RepeatCard >> affect: aPlayer on: aBoard [
 	aPosition := aBoard lastLandingPositionOf: aPlayer.
 	aPosition ~= 0
 		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayer on: aBoard ].
-	aBoard addToRemovedCards: self
+	aBoard deck addToRemovedCards: self
 ]
 
 { #category : #asserting }
