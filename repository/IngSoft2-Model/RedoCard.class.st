@@ -61,8 +61,8 @@ RedoCard >> cancel: otherCard on: aBoard [
 ]
 
 { #category : #initialization }
-RedoCard >> initializeOwnedBy: aPlayer [
-	owner := aPlayer.
+RedoCard >> initialize [
+	owner := OrderedCollection new.
 	lastCardIsSet := false
 ]
 

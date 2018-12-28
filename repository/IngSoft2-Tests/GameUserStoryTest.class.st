@@ -8,7 +8,7 @@ Class {
 GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces accelerationCard redoCard repeatCard cancellationCard overloadCard speedCard deck |
 	sequenceOne := CircularIterator contains: #(1 1 1 1 4 4 9 1 6).
-	sequenceTwo := CircularIterator contains: #(1 1 2 2 2 4 5 1 6).
+	sequenceTwo := CircularIterator contains: #(2 2 2 2 2 4 5 1 6).
 	diceOne := Dice faces: 10 ofType: (DeterministicType rolling: sequenceOne faces: 10).
 	diceTwo := Dice faces: 12 ofType: (DeterministicType rolling: sequenceTwo faces: 12).
 	playerOne := Player named: 'Hector'.
@@ -16,7 +16,7 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 	spaces := {NoEffectSpace new.
 	NoEffectSpace new.
 	NoEffectSpace new.
-	NoEffectSpace new.
+	CardSpace new.
 	SpeedUpSpace new.
 	NoEffectSpace new.
 	(MoonWalkSpace backwardsValue: 3).
@@ -43,6 +43,7 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 	
 	"The game starts"
 	playerOne play: accelerationCard in: game.	"allPlayers acceleration + 1"
+	playerTwo play: cancellationCard in: game cancelling: accelerationCard.	"acceleration cancelled"
 	self assert: (game gameStatus positionOf: playerOne) equals: 1.
 	self assert: (game gameStatus positionOf: playerTwo) equals: 1.
 	self assert: (game hasTheTurn: playerOne).
@@ -51,7 +52,6 @@ GameUserStoryTest >> testTwoPlayersPlayAndTheFirstOneWins [
 	self assert: (game hasTheTurn: playerTwo).
 	game move: playerTwo.
 	self assert: (game gameStatus positionOf: playerTwo) equals: 4.
-	playerTwo play: cancellationCard in: game cancelling: accelerationCard.	"acceleration cancelled"
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 7.

@@ -47,6 +47,6 @@ OverloadCard >> assertAffectedPlayerQuantity: playersCollection [
 
 { #category : #asserting }
 OverloadCard >> assertOwnerCanUseAnytime [
-	owner addCard: self.
+	owner first addCard: self.
 	AssertionFailure signal: 'You cannot play a permanent card right now'
 ]
