@@ -31,7 +31,7 @@ Class {
 { #category : #adding }
 AccelerationCard >> addOn: aBoard affecting: playersCollection [
 	self assertAffectedPlayerQuantity: playersCollection on: aBoard.
-	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
+	
 ]
 
 { #category : #affecting }
@@ -47,6 +47,5 @@ AccelerationCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
 
 { #category : #asserting }
 AccelerationCard >> assertOwnerCanUseAnytime [
-	owner first addCard: self.
 	AssertionFailure signal: 'This is a permanent card'
 ]

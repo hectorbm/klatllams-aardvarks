@@ -31,21 +31,21 @@ Class {
 
 { #category : #adding }
 RepeatCard >> addOn: aBoard affecting: aPlayersCollection [
-	self assertAffectedPlayerQuantity: aPlayersCollection.
-	self affect: aPlayersCollection first on: aBoard
+	self assertAffectedPlayerQuantity: aPlayersCollection on: aBoard.
+	
 ]
 
 { #category : #affecting }
-RepeatCard >> affect: aPlayer on: aBoard [
+RepeatCard >> affect: aPlayersCollection on: aBoard [
 	| aPosition |
-	aPosition := aBoard lastLandingPositionOf: aPlayer.
+	aPosition := aBoard lastLandingPositionOf: aPlayersCollection first.
 	aPosition ~= 0
-		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayer on: aBoard ].
-	aBoard deck addToRemovedCards: self
+		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayersCollection first on: aBoard ].
+	
 ]
 
 { #category : #asserting }
-RepeatCard >> assertAffectedPlayerQuantity: aPlayersCollection [
+RepeatCard >> assertAffectedPlayerQuantity: aPlayersCollection on: aBoard [
 	aPlayersCollection size ~= 1
 		ifTrue: [ AssertionFailure signal: 'This card can only affect one player' ]
 ]

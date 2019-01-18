@@ -69,6 +69,11 @@ Card >> owner [
 ]
 
 { #category : #updating }
+Card >> removeOn: aBoard [
+	aBoard deck addToRemovedCards: self.
+]
+
+{ #category : #updating }
 Card >> updateOwner: aPlayer [
 	owner addFirst: aPlayer.
 ]

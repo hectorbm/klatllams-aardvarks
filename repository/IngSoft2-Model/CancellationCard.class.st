@@ -30,12 +30,16 @@ Class {
 
 { #category : #adding }
 CancellationCard >> addOn: aBoard affecting: otherCard [
-	self cancel: otherCard on: aBoard
+	self affect: otherCard on: aBoard
 ]
 
 { #category : #affecting }
 CancellationCard >> affect: card on: aBoard [
 	self cancel: card on: aBoard
+]
+
+{ #category : #asserting }
+CancellationCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
 ]
 
 { #category : #asserting }
@@ -46,7 +50,7 @@ CancellationCard >> assertOwnerCanUseAnytime [
 CancellationCard >> cancel: otherCard on: aBoard [
 	aBoard deck activeCardsPlayerAffected isEmpty
 		ifTrue: [ owner first addCard: self.
-			AssertionFailure signal: 'You cannot play a canceling card when there are no active cards.' ].
-	aBoard deck removeAnActive: otherCard.
-	aBoard deck addToRemovedCards: self
+			AssertionFailure
+				signal: 'You cannot play a canceling card when there are no active cards.' ].
+	aBoard deck removeAnActive: otherCard
 ]

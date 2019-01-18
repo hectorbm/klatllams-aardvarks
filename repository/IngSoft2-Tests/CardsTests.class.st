@@ -225,22 +225,29 @@ CardsTests >> testPermanentCardCanBeUsedOnlyOnPlayerTurn [
 			otherCard.
 			AccelerationCard new.
 			AccelerationCard new} asOrderedCollection.
-	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} boardComposedBy: spaces totalLaps: 2 using: deck.
+	game := Game
+		playedBy:
+			{playerOne.
+			playerTwo}
+		throwing:
+			{diceOne.
+			diceTwo}
+		boardComposedBy: spaces
+		totalLaps: 2
+		using: deck.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self
 		assert: (game gameStatus positionOf: playerOne) equals: 3;
 		assert: (game hasTheTurn: playerTwo);
-		should: [ playerOne play: card in: game affecting: playerTwo ]
-			raise: AssertionFailure
-			withExceptionDo: [ :signal | self assert: signal messageText equals: 'This is a permanent card' ].
+		should: [ playerOne play: card in: game affecting: playerTwo ] raise: AssertionFailure.
 	self
 		assert: (game gameStatus positionOf: playerOne) equals: 3;
 		assert: (game hasTheTurn: playerTwo);
 		should: [ playerOne play: otherCard in: game affecting: playerTwo ]
 			raise: AssertionFailure
-			withExceptionDo: [ :signal | self assert: signal messageText equals: 'This is a permanent card' ].
-			
+			withExceptionDo:
+				[ :signal | self assert: signal messageText equals: 'You cannot play now' ]
 ]
 
 { #category : #tests }

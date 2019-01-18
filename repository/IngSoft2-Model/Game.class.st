@@ -99,13 +99,19 @@ Game >> add: aCard [
 { #category : #actions }
 Game >> add: aCard affecting: otherPlayers [
 	self assertPlayerCanUseA: aCard.
-	aCard addOn: board affecting: otherPlayers
+	aCard addOn: board affecting: otherPlayers.
+	[ aCard assertOwnerCanUseAnytime.
+	aCard affect: otherPlayers on: board.
+	aCard removeOn: board]
+		on: AssertionFailure
+		do: [ board deck addAnActive: (CardPlayerAffected withCard: aCard affecting: otherPlayers) ]
 ]
 
 { #category : #actions }
 Game >> add: aCard cancelling: anotherCard [
 	self assertPlayerCanUseA: aCard.
-	aCard addOn: board cancelling: anotherCard
+	aCard addOn: board cancelling: anotherCard.
+	board deck addToRemovedCards: aCard
 ]
 
 { #category : #asserting }
@@ -119,7 +125,10 @@ Game >> assertPlayerCanUseA: card [
 	board deck assertIsAValid: card.
 	[ self assertPlayersTurn: card owner ]
 		on: AssertionFailure
-		do: [ card assertOwnerCanUseAnytime ].
+		do: [ [ card assertOwnerCanUseAnytime ]
+				on: AssertionFailure
+				do: [ card owner addCard: card.
+					AssertionFailure signal: 'You cannot play now' ] ].
 	card lastPlayedCards: cardsStory.
 	cardsStory addFirst: card
 ]
