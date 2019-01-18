@@ -27,16 +27,14 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
-		'lastCard',
-		'lastCardIsSet'
+		'lastCard'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #updating }
 RedoCard >> addLastCard: aCard [
-	lastCard := aCard.
-	lastCardIsSet := true
+	lastCard := aCard
 ]
 
 { #category : #adding }
@@ -58,12 +56,6 @@ RedoCard >> assertOwnerCanUseAnytime [
 RedoCard >> cancel: otherCard on: aBoard [
 	lastCard cancel: otherCard on: aBoard.
 	aBoard deck addToRemovedCards: self
-]
-
-{ #category : #initialization }
-RedoCard >> initialize [
-	owner := OrderedCollection new.
-	lastCardIsSet := false
 ]
 
 { #category : #updating }

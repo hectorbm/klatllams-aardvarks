@@ -131,8 +131,8 @@ Board >> lastLandingPositionOf: aPlayer [
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
 	deck activeCardsPlayerAffected
-		select: [ :cardInfo | cardInfo affected: aPlayer ]
-		thenDo: [ :cardInfo | cardInfo card affect: aPlayer on: self ].
+		select: [ :cardPlayerAffected | cardPlayerAffected affected: aPlayer ]
+		thenDo: [ :cardPlayerAffected | cardPlayerAffected card affect: aPlayer on: self ].
 	self calculateAndUpdate: aPlayer by: aValue.
 	self updateLastLandingTo: (gameStatus positionOf: aPlayer) of: aPlayer.
 	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self

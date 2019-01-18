@@ -26,9 +26,6 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : #RepeatCard,
 	#superclass : #Card,
-	#instVars : [
-		'notUsedCard'
-	],
 	#category : #'IngSoft2-Model'
 }
 

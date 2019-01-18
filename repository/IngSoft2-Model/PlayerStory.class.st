@@ -24,7 +24,7 @@ Internal Representation and Key Implementation Points.
     Implementation Points
 "
 Class {
-	#name : #PlayerHistory,
+	#name : #PlayerStory,
 	#superclass : #Object,
 	#instVars : [
 		'playerPositions',
@@ -34,29 +34,29 @@ Class {
 }
 
 { #category : #'instance creation' }
-PlayerHistory class >> player: aPlayer [
+PlayerStory class >> player: aPlayer [
 	^self new initializeWithPlayer: aPlayer
 ]
 
 { #category : #initialization }
-PlayerHistory >> initializeWithPlayer: aPlayer [
+PlayerStory >> initializeWithPlayer: aPlayer [
 	player := aPlayer.
 	playerPositions := OrderedCollection new.
 	
 ]
 
 { #category : #accessing }
-PlayerHistory >> lastPlayerPosition [
+PlayerStory >> lastPlayerPosition [
 	^ playerPositions first
 ]
 
 { #category : #accessing }
-PlayerHistory >> player [
+PlayerStory >> player [
 	^ player
 ]
 
 { #category : #adding }
-PlayerHistory >> updatePlayerTo: aPosition withLaps: aValue [
+PlayerStory >> updatePlayerTo: aPosition withLaps: aValue [
 	playerPositions
 		addFirst: (PlayerPosition player: player position: aPosition laps: aValue)
 ]

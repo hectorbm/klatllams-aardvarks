@@ -34,7 +34,7 @@ Class {
 		'currentPlayer',
 		'board',
 		'laps',
-		'cardsHistory'
+		'cardsStory'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -120,8 +120,8 @@ Game >> assertPlayerCanUseA: card [
 	[ self assertPlayersTurn: card owner ]
 		on: AssertionFailure
 		do: [ card assertOwnerCanUseAnytime ].
-	card lastPlayedCards: cardsHistory.
-	cardsHistory addFirst: card
+	card lastPlayedCards: cardsStory.
+	cardsStory addFirst: card
 ]
 
 { #category : #asserting }
@@ -155,7 +155,7 @@ Game >> initializePlayedBy: aPlayersCollection throwing: aDicesCollection played
 	board := aBoard.
 	currentPlayer := players nextBy: 1.
 	laps := aQuantity.
-	cardsHistory := OrderedCollection new.
+	cardsStory := OrderedCollection new.
 	aPlayersCollection
 		do: [ :player | 
 			2 timesRepeat: [ card := board deck deliverNewCard.
