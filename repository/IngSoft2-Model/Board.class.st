@@ -90,14 +90,14 @@ Board class >> playedBy: aPlayersCollection spaces: aQuantity using: aDeck [
 
 { #category : #updating }
 Board >> calculateAndUpdate: aPlayer by: aQuantity [
-	| positionsCircularIterator |
-	positionsCircularIterator := CircularIterator
+	| positionsCircularIter |
+	positionsCircularIter := CircularIterator
 		contains: (1 to: spaces size) asOrderedCollection
 		startingAt: (gameStatus positionOf: aPlayer).
 	gameStatus
 		updatePositionAndLapsOf: aPlayer
-		to: (positionsCircularIterator nextBy: aQuantity)
-		adding: positionsCircularIterator turns + (gameStatus lapsOf: aPlayer)
+		to: (positionsCircularIter nextBy: aQuantity)
+		adding: positionsCircularIter turns + (gameStatus lapsOf: aPlayer)
 ]
 
 { #category : #accessing }
@@ -125,17 +125,22 @@ Board >> lastLandingPositionOf: aPlayer [
 	landingPlayerPositions
 		detect: [ :landingPosition | landingPosition player = aPlayer ]
 		ifFound: [ :landingPosition | ^ landingPosition position ]
-		ifNone: [ ^0 ]
+		ifNone: [ AssertionFailure signal: 'The player did not move yet' ]
 ]
 
 { #category : #action }
 Board >> moveAndAffect: aPlayer by: aValue [
 	deck activeCardsPlayerAffected
-		select: [ :cardPlayerAffected | cardPlayerAffected affected: aPlayer ]
-		thenDo: [ :cardPlayerAffected | cardPlayerAffected card affect: aPlayer on: self ].
+		select: [ :cardPlayerAffected | cardPlayerAffected isAffecting: aPlayer ]
+		thenDo:
+			[ :cardPlayerAffected | cardPlayerAffected card affect: aPlayer on: self ].
 	self calculateAndUpdate: aPlayer by: aValue.
-	self updateLastLandingTo: (gameStatus positionOf: aPlayer) of: aPlayer.
-	(spaces at: (gameStatus positionOf: aPlayer)) affect: aPlayer on: self
+	self
+		updateLastLandingOf: aPlayer
+		to: (gameStatus positionOf: aPlayer).
+	(spaces at: (gameStatus positionOf: aPlayer))
+		affect: aPlayer
+		on: self
 ]
 
 { #category : #accessing }
@@ -144,6 +149,8 @@ Board >> spaces [
 ]
 
 { #category : #updating }
-Board >> updateLastLandingTo: aPosition of: aPlayer [
-	landingPlayerPositions addFirst: (LandingPosition player: aPlayer on: aPosition)
+Board >> updateLastLandingOf: aPlayer to: aPosition [
+	| newLandingPosition |
+	newLandingPosition := LandingPosition player: aPlayer on: aPosition.
+	landingPlayerPositions addFirst: newLandingPosition
 ]

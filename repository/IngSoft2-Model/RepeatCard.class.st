@@ -36,12 +36,11 @@ RepeatCard >> addOn: aBoard affecting: aPlayersCollection [
 ]
 
 { #category : #affecting }
-RepeatCard >> affect: aPlayersCollection on: aBoard [
+RepeatCard >> affect: aPlayer on: aBoard [
 	| aPosition |
-	aPosition := aBoard lastLandingPositionOf: aPlayersCollection first.
+	aPosition := aBoard lastLandingPositionOf: aPlayer.
 	aPosition ~= 0
-		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayersCollection first on: aBoard ].
-	
+		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayer first on: aBoard ]
 ]
 
 { #category : #asserting }

@@ -55,8 +55,9 @@ PlayerStory >> player [
 	^ player
 ]
 
-{ #category : #adding }
+{ #category : #updating }
 PlayerStory >> updatePlayerTo: aPosition withLaps: aValue [
-	playerPositions
-		addFirst: (PlayerPosition player: player position: aPosition laps: aValue)
+	| newPlayerPosition |
+	newPlayerPosition := PlayerPosition player: player position: aPosition laps: aValue.
+	playerPositions addFirst: newPlayerPosition
 ]

@@ -85,5 +85,5 @@ GameStatus >> updatePositionAndLapsOf: aPlayer to: aPosition adding: laps [
 	playersStories
 		detect: [ :playerStory | playerStory player = aPlayer ]
 		ifFound: [ :playerStory | playerStory updatePlayerTo: aPosition withLaps: laps ]
-		ifNone: [ Exception signal: 'Player not found' ]
+		ifNone: [ AssertionFailure signal: 'Player not found' ]
 ]

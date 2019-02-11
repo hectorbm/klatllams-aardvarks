@@ -81,9 +81,9 @@ Deck >> activeCardsPlayerAffected [
 ]
 
 { #category : #updating }
-Deck >> addAnActive: aCardPlayerAffected [
-	self assertIsAValid: aCardPlayerAffected card.
-	activeCardsPlayerAffected add: aCardPlayerAffected
+Deck >> addAnActive: cardPlayerAffected [
+	self assertIsAValid: cardPlayerAffected card.
+	activeCardsPlayerAffected add: cardPlayerAffected
 ]
 
 { #category : #updating }
@@ -94,17 +94,19 @@ Deck >> addToRemovedCards: aCard [
 
 { #category : #asserting }
 Deck >> assertIsAValid: aCard [
-	validCards detect: [ :card | card = aCard ] ifNone: [ AssertionFailure signal: 'Not a valid card' ]
+	validCards
+		detect: [ :card | card = aCard ]
+		ifNone: [ AssertionFailure signal: 'Not a valid card' ]
 ]
 
 { #category : #asserting }
 Deck >> assertNotEmptyAvailableCards [
 	availableCards
 		ifEmpty: [ availableCards addAll: removedCards shuffled.
-			removedCards removeAll ]
+						  removedCards removeAll ]
 ]
 
-{ #category : #action }
+{ #category : #updating }
 Deck >> deliverNewCard [
 	| card |
 	self assertNotEmptyAvailableCards.
@@ -116,11 +118,11 @@ Deck >> deliverNewCard [
 { #category : #initialization }
 Deck >> initializeWithCards: aCardsCollection [
 	availableCards := OrderedCollection new.
-	availableCards addAll: aCardsCollection.
 	validCards := OrderedCollection new.
-	validCards addAll: availableCards.
 	removedCards := OrderedCollection new.
-	activeCardsPlayerAffected := OrderedCollection new
+	activeCardsPlayerAffected := OrderedCollection new.
+	availableCards addAll: aCardsCollection.
+	validCards addAll: availableCards
 ]
 
 { #category : #updating }

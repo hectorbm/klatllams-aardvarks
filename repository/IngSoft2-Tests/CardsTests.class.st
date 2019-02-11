@@ -667,7 +667,10 @@ CardsTests >> testRepeatCardOnlyAffectsAPlayerIfDicesWereRolled [
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 4.
-	playerOne play: card in: game affecting: playerTwo.
+	self
+		should: [ playerOne play: card in: game affecting: playerTwo ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'The player did not move yet' ].
 	self assert: (game hasTheTurn: playerTwo).
 	game move: playerTwo.
 	self assert: (game gameStatus positionOf: playerTwo) equals: 3
