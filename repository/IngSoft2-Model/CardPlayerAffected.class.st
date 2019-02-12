@@ -49,7 +49,7 @@ CardPlayerAffected >> initializeWithCard: aCard affecting: aPlayersCollection [
 	affectedPlayers := aPlayersCollection 
 ]
 
-{ #category : #testing }
+{ #category : #accessing }
 CardPlayerAffected >> isAffecting: aPlayer [
 	affectedPlayers detect: [ :player | aPlayer = player ] ifFound: [ ^ true ].
 	^ false

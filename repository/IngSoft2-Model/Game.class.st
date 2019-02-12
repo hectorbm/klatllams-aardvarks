@@ -92,26 +92,35 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 ]
 
 { #category : #actions }
-Game >> add: aCard [
-	self add: aCard affecting: players elements 
+Game >> add: card [
+	self assertPlayerCanUseA: card.
+	card assertAffectedPlayerQuantity: players elements on: board.
+	cardsStory addFirst: card.
+	card isTransient
+		ifTrue: [ card affect: players elements on: board.
+			board deck addToRemovedCards: card ]
+		ifFalse:
+			[ board deck addAnActive: (CardPlayerAffected withCard: card affecting: players elements) ]
 ]
 
 { #category : #actions }
-Game >> add: aCard affecting: otherPlayers [
-	self assertPlayerCanUseA: aCard.
-	aCard addOn: board affecting: otherPlayers.
-	[ aCard assertOwnerCanUseAnytime.
-	aCard affect: otherPlayers on: board.
-	aCard removeOn: board]
-		on: AssertionFailure
-		do: [ board deck addAnActive: (CardPlayerAffected withCard: aCard affecting: otherPlayers) ]
+Game >> add: card affecting: player [
+	self assertPlayerCanUseA: card.
+	card assertAffectedPlayerQuantity: player asOrderedCollection on: board.
+	cardsStory addFirst: card.
+	card isTransient
+		ifTrue: [ card affect: player on: board.
+			board deck addToRemovedCards: card ]
+		ifFalse: [ board deck
+				addAnActive: (CardPlayerAffected withCard: card affecting: player asOrderedCollection) ]
 ]
 
 { #category : #actions }
-Game >> add: aCard cancelling: anotherCard [
-	self assertPlayerCanUseA: aCard.
-	aCard addOn: board cancelling: anotherCard.
-	board deck addToRemovedCards: aCard
+Game >> add: card cancelling: anotherCard [
+	self assertPlayerCanUseA: card.
+	cardsStory addFirst: card.
+	card cancel: anotherCard on: board.
+	board deck addToRemovedCards: card
 ]
 
 { #category : #asserting }
@@ -123,14 +132,8 @@ Game >> assertGameHasNotFinished [
 { #category : #asserting }
 Game >> assertPlayerCanUseA: card [
 	board deck assertIsAValid: card.
-	[ self assertPlayersTurn: card owner ]
-		on: AssertionFailure
-		do: [ [ card assertOwnerCanUseAnytime ]
-				on: AssertionFailure
-				do: [ card owner addCard: card.
-					AssertionFailure signal: 'You cannot play now' ] ].
 	card lastPlayedCards: cardsStory.
-	cardsStory addFirst: card
+	card assertOwnerCanUseOnTurnOf: currentPlayer
 ]
 
 { #category : #asserting }

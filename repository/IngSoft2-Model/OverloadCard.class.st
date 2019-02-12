@@ -28,24 +28,27 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #adding }
-OverloadCard >> addOn: aBoard affecting: playersCollection [
-	self assertAffectedPlayerQuantity: playersCollection on: aBoard.
-	
-]
-
-{ #category : #affecting }
+{ #category : #action }
 OverloadCard >> affect: aPlayer on: aBoard [
 	aBoard calculateAndUpdate: aPlayer by: 2 negated
 ]
 
 { #category : #asserting }
 OverloadCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
-	playersCollection size ~= 1
-		ifTrue: [ AssertionFailure signal: 'This card can only affect one player' ]
+	playersCollection size = 1
+		ifTrue: [ aBoard gameStatus players
+				detect: [ :player | player = playersCollection first ]
+				ifNone: [  AssertionFailure signal: 'Invalid Player'] ]
+		ifFalse: [ AssertionFailure signal: 'This card only affects 1 player' ]
 ]
 
 { #category : #asserting }
-OverloadCard >> assertOwnerCanUseAnytime [
-	AssertionFailure signal: 'You cannot play a permanent card right now'
+OverloadCard >> assertOwnerCanUseOnTurnOf: aPlayer [
+	self owner ~= aPlayer
+		ifTrue: [ AssertionFailure signal: 'You cannot play now' ]
+]
+
+{ #category : #asserting }
+OverloadCard >> isTransient [
+	^ false
 ]

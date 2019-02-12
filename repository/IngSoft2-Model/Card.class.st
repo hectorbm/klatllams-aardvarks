@@ -28,34 +28,34 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #adding }
-Card >> addOn: aBoard affecting: playersCollection [
-	^ self subclassResponsibility
-]
-
-{ #category : #adding }
-Card >> addOn: aBoard cancelling: aCard [
-	self cancel: aCard on: aBoard
-]
-
-{ #category : #affecting }
+{ #category : #action }
 Card >> affect: arg1 on: aBoard [
 	^ self subclassResponsibility
 ]
 
 { #category : #asserting }
-Card >> assertOwnerCanUseAnytime [
+Card >> assertAffectedPlayerQuantity: arg1 on: arg2 [ 
 	^ self subclassResponsibility
 ]
 
-{ #category : #affecting }
+{ #category : #asserting }
+Card >> assertOwnerCanUseOnTurnOf: aPlayer [
+	^ self subclassResponsibility
+]
+
+{ #category : #action }
 Card >> cancel: otherCard on: aBoard [
-	AssertionFailure signal: 'This card cannot cancel another card'
+	AssertionFailure signal: 'Only Cancellation Card can cancel other card'
 ]
 
 { #category : #initialization }
 Card >> initialize [
 	owner := OrderedCollection new
+]
+
+{ #category : #asserting }
+Card >> isTransient [
+	^ self subclassResponsibility
 ]
 
 { #category : #updating }
@@ -66,11 +66,6 @@ Card >> lastPlayedCards: aCardsCollection [
 { #category : #accessing }
 Card >> owner [
 	^ owner first.
-]
-
-{ #category : #updating }
-Card >> removeOn: aBoard [
-	aBoard deck addToRemovedCards: self.
 ]
 
 { #category : #updating }

@@ -27,8 +27,7 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
-		'lastCard',
-		'lastCardIsSet'
+		'lastCard'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -36,15 +35,10 @@ Class {
 { #category : #updating }
 RedoCard >> addLastCard: aCard [
 	lastCard addFirst: aCard.
-	lastCardIsSet := true.
+	
 ]
 
-{ #category : #adding }
-RedoCard >> addOn: aBoard affecting: playersCollection [
-	lastCard first assertAffectedPlayerQuantity: playersCollection on: aBoard
-]
-
-{ #category : #affecting }
+{ #category : #action }
 RedoCard >> affect: aPlayer on: aBoard [
 	lastCard first affect: aPlayer on: aBoard.
 ]
@@ -55,22 +49,25 @@ RedoCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
 ]
 
 { #category : #asserting }
-RedoCard >> assertOwnerCanUseAnytime [
-	lastCardIsSet 
-		ifTrue: [ lastCard first assertOwnerCanUseAnytime  ]
+RedoCard >> assertOwnerCanUseOnTurnOf: aPlayer [
+	
 ]
 
-{ #category : #affecting }
+{ #category : #action }
 RedoCard >> cancel: otherCard on: aBoard [
 	lastCard first cancel: otherCard on: aBoard.
-	aBoard deck addToRemovedCards: self
+	
 ]
 
 { #category : #initialization }
 RedoCard >> initialize [
 	super initialize.
-	lastCardIsSet := false.
 	lastCard := OrderedCollection new.
+]
+
+{ #category : #asserting }
+RedoCard >> isTransient [
+	^ lastCard first isTransient
 ]
 
 { #category : #updating }
@@ -78,10 +75,4 @@ RedoCard >> lastPlayedCards: aCardsCollection [
 	aCardsCollection notEmpty
 		ifTrue: [ self addLastCard: aCardsCollection first ]
 		ifFalse: [ AssertionFailure signal: 'Redo only can be used if a Card was Used' ]
-]
-
-{ #category : #updating }
-RedoCard >> removeOn: aBoard [
-	aBoard deck addToRemovedCards: self.
-	lastCardIsSet := false
 ]
