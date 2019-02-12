@@ -31,10 +31,10 @@ Class {
 
 { #category : #action }
 RepeatCard >> affect: aPlayer on: aBoard [
-	| aPosition space |
+	| aPosition |
 	aPosition := aBoard lastLandingPositionOf: aPlayer.
-	space := aBoard spaces at: aPosition .
-	space affect: aPlayer on: aBoard
+	aPosition = 0
+		ifFalse: [ (aBoard spaces at: aPosition) affect: aPlayer on: aBoard ]
 ]
 
 { #category : #asserting }
