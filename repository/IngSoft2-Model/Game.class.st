@@ -95,10 +95,7 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 Game >> add: card [
 	self assertPlayerCanUseA: card.
 	card assertAffectedPlayerQuantity: players elements on: board.
-	card isTransient
-		ifTrue: [ card affect: players elements on: board.
-			board deck addToRemovedCards: card ]
-		ifFalse: [ board deck addAnActive: (CardPlayerAffected withCard: card affecting: players elements) ].
+	card addTo: board.
 	cardsStory addFirst: card
 ]
 
@@ -106,10 +103,7 @@ Game >> add: card [
 Game >> add: card affecting: player [
 	self assertPlayerCanUseA: card.
 	card assertAffectedPlayerQuantity: player asOrderedCollection on: board.
-	card isTransient
-		ifTrue: [ card affect: player on: board.
-			board deck addToRemovedCards: card ]
-		ifFalse: [ board deck addAnActive: (CardPlayerAffected withCard: card affecting: player asOrderedCollection) ].
+	card addTo: board affecting: player.
 	cardsStory addFirst: card
 ]
 

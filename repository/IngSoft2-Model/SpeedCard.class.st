@@ -29,6 +29,11 @@ Class {
 }
 
 { #category : #action }
+SpeedCard >> addTo: aBoard affecting: player [
+	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: player asOrderedCollection )
+]
+
+{ #category : #action }
 SpeedCard >> affect: aPlayer on: aBoard [
 	aBoard calculateAndUpdate: aPlayer by: 1
 ]

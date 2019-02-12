@@ -29,6 +29,13 @@ Class {
 }
 
 { #category : #action }
+AccelerationCard >> addTo: aBoard [ 
+	| players |
+	players := aBoard gameStatus players.
+	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: players)
+]
+
+{ #category : #action }
 AccelerationCard >> affect: aPlayer on: aBoard [
 	aBoard calculateAndUpdate: aPlayer by: 1
 ]

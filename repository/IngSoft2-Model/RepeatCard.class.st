@@ -30,6 +30,12 @@ Class {
 }
 
 { #category : #action }
+RepeatCard >> addTo: aBoard affecting: aPlayer [
+	self affect: aPlayer on: aBoard.
+	aBoard deck addToRemovedCards: self
+]
+
+{ #category : #action }
 RepeatCard >> affect: aPlayer on: aBoard [
 	| aPosition |
 	aPosition := aBoard lastLandingPositionOf: aPlayer.
