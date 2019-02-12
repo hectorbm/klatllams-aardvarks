@@ -28,7 +28,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'card',
-		'affectedPlayer'
+		'affectedPlayers'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -39,12 +39,6 @@ CardPlayerAffected class >> withCard: aCard affecting: aPlayerCollection [
 ]
 
 { #category : #accessing }
-CardPlayerAffected >> affected: aPlayer [
-	affectedPlayer detect: [ :player | aPlayer = player ] ifFound: [ ^ true ].
-	^ false
-]
-
-{ #category : #accessing }
 CardPlayerAffected >> card [
 	^ card
 ]
@@ -52,5 +46,11 @@ CardPlayerAffected >> card [
 { #category : #initialization }
 CardPlayerAffected >> initializeWithCard: aCard affecting: aPlayersCollection [
 	card := aCard.
-	affectedPlayer := aPlayersCollection 
+	affectedPlayers := aPlayersCollection 
+]
+
+{ #category : #accessing }
+CardPlayerAffected >> isAffecting: aPlayer [
+	affectedPlayers detect: [ :player | aPlayer = player ] ifFound: [ ^ true ].
+	^ false
 ]

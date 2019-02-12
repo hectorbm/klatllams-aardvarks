@@ -6,7 +6,7 @@ Class {
 
 { #category : #tests }
 CardsTests >> testAccelerationCardAffectsAllPlayers [
-	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces card deck |
+	| game playerOne playerTwo sequenceOne sequenceTwo diceOne diceTwo spaces deck |
 	playerOne := Player named: 'Carrot'.
 	playerTwo := Player named: 'Nacho'.
 	deck := Deck
@@ -68,7 +68,7 @@ CardsTests >> testCancellationCanBeDoneIfAtLeast1PermanentCardIsActive [
 	self
 		should: [ playerTwo play: cancellationCard  in: game cancelling: card ]
 			raise: AssertionFailure
-			withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot play a canceling card when there are no active cards.' ];
+			withExceptionDo: [ :signal | self assert: signal messageText equals: 'Cannot play Cancellation when not active cards available' ];
 		assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 3.
@@ -97,7 +97,12 @@ CardsTests >> testCancellationCanBeDoneOnlyWithTheRightCard [
 	spaces := BoardTest createNoEffectSpacesCollection.
 	acellerationCard := AccelerationCard new.
 	speedUpCard := SpeedCard new.
-	deck := Deck composedBy: {acellerationCard.(AccelerationCard new).speedUpCard.(AccelerationCard new)} asOrderedCollection.
+	deck := Deck
+		composedBy:
+			{acellerationCard.
+			AccelerationCard new.
+			speedUpCard.
+			AccelerationCard new} asOrderedCollection.
 	game := Game
 		playedBy:
 			{playerOne.
@@ -116,7 +121,8 @@ CardsTests >> testCancellationCanBeDoneOnlyWithTheRightCard [
 		assert: (game hasTheTurn: playerTwo);
 		should: [ playerTwo play: speedUpCard in: game cancelling: acellerationCard ]
 			raise: AssertionFailure
-			withExceptionDo: [ :signal | self assert: signal messageText equals: 'This card cannot cancel another card' ].
+			withExceptionDo:
+				[ :signal | self assert: signal messageText equals: 'Only Cancellation Card can cancel other card' ].
 	game move: playerTwo.
 	self assert: (game gameStatus positionOf: playerTwo) equals: 4
 ]
@@ -225,7 +231,16 @@ CardsTests >> testPermanentCardCanBeUsedOnlyOnPlayerTurn [
 			otherCard.
 			AccelerationCard new.
 			AccelerationCard new} asOrderedCollection.
-	game := Game playedBy: {playerOne.playerTwo} throwing:{diceOne.diceTwo} boardComposedBy: spaces totalLaps: 2 using: deck.
+	game := Game
+		playedBy:
+			{playerOne.
+			playerTwo}
+		throwing:
+			{diceOne.
+			diceTwo}
+		boardComposedBy: spaces
+		totalLaps: 2
+		using: deck.
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self
@@ -233,14 +248,13 @@ CardsTests >> testPermanentCardCanBeUsedOnlyOnPlayerTurn [
 		assert: (game hasTheTurn: playerTwo);
 		should: [ playerOne play: card in: game affecting: playerTwo ]
 			raise: AssertionFailure
-			withExceptionDo: [ :signal | self assert: signal messageText equals: 'This is a permanent card' ].
+			withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot play now' ].
 	self
 		assert: (game gameStatus positionOf: playerOne) equals: 3;
 		assert: (game hasTheTurn: playerTwo);
 		should: [ playerOne play: otherCard in: game affecting: playerTwo ]
 			raise: AssertionFailure
-			withExceptionDo: [ :signal | self assert: signal messageText equals: 'This is a permanent card' ].
-			
+			withExceptionDo: [ :signal | self assert: signal messageText equals: 'You cannot play now' ]
 ]
 
 { #category : #tests }
@@ -660,7 +674,10 @@ CardsTests >> testRepeatCardOnlyAffectsAPlayerIfDicesWereRolled [
 	self assert: (game hasTheTurn: playerOne).
 	game move: playerOne.
 	self assert: (game gameStatus positionOf: playerOne) equals: 4.
-	playerOne play: card in: game affecting: playerTwo.
+	self
+		should: [ playerOne play: card in: game affecting: playerTwo ]
+		raise: AssertionFailure
+		withExceptionDo: [ :signal | self assert: signal messageText equals: 'The player did not move yet' ].
 	self assert: (game hasTheTurn: playerTwo).
 	game move: playerTwo.
 	self assert: (game gameStatus positionOf: playerTwo) equals: 3

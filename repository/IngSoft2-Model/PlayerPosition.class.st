@@ -42,10 +42,10 @@ PlayerPosition class >> player: aPlayer position: aPositionValue laps: aLapsValu
 ]
 
 { #category : #initialization }
-PlayerPosition >> initializeWithPlayer: aPlayer position: aPosition laps: aLapsValue [
+PlayerPosition >> initializeWithPlayer: aPlayer position: aPosition laps: lapsQuantity [
 	player := aPlayer.
 	position := aPosition.
-	lap := aLapsValue
+	lap := lapsQuantity
 ]
 
 { #category : #accessing }

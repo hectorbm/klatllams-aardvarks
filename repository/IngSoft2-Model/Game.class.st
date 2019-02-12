@@ -34,7 +34,7 @@ Class {
 		'currentPlayer',
 		'board',
 		'laps',
-		'cardsHistory'
+		'cardsStory'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -92,20 +92,33 @@ Game class >> playedBy: aPlayersCollection throwing: aDicesCollection spaces: aS
 ]
 
 { #category : #actions }
-Game >> add: aCard [
-	self add: aCard affecting: players elements 
+Game >> add: card [
+	self assertPlayerCanUseA: card.
+	card assertAffectedPlayerQuantity: players elements on: board.
+	card isTransient
+		ifTrue: [ card affect: players elements on: board.
+			board deck addToRemovedCards: card ]
+		ifFalse: [ board deck addAnActive: (CardPlayerAffected withCard: card affecting: players elements) ].
+	cardsStory addFirst: card
 ]
 
 { #category : #actions }
-Game >> add: aCard affecting: otherPlayers [
-	self assertPlayerCanUseA: aCard.
-	aCard addOn: board affecting: otherPlayers
+Game >> add: card affecting: player [
+	self assertPlayerCanUseA: card.
+	card assertAffectedPlayerQuantity: player asOrderedCollection on: board.
+	card isTransient
+		ifTrue: [ card affect: player on: board.
+			board deck addToRemovedCards: card ]
+		ifFalse: [ board deck addAnActive: (CardPlayerAffected withCard: card affecting: player asOrderedCollection) ].
+	cardsStory addFirst: card
 ]
 
 { #category : #actions }
-Game >> add: aCard cancelling: anotherCard [
-	self assertPlayerCanUseA: aCard.
-	aCard addOn: board cancelling: anotherCard
+Game >> add: card cancelling: anotherCard [
+	self assertPlayerCanUseA: card.
+	card cancel: anotherCard on: board.
+	board deck addToRemovedCards: card.
+	cardsStory addFirst: card
 ]
 
 { #category : #asserting }
@@ -117,11 +130,8 @@ Game >> assertGameHasNotFinished [
 { #category : #asserting }
 Game >> assertPlayerCanUseA: card [
 	board deck assertIsAValid: card.
-	[ self assertPlayersTurn: card owner ]
-		on: AssertionFailure
-		do: [ card assertOwnerCanUseAnytime ].
-	card lastPlayedCards: cardsHistory.
-	cardsHistory addFirst: card
+	card lastPlayedCards: cardsStory.
+	card assertOwnerCanUseOnTurnOf: currentPlayer
 ]
 
 { #category : #asserting }
@@ -155,7 +165,7 @@ Game >> initializePlayedBy: aPlayersCollection throwing: aDicesCollection played
 	board := aBoard.
 	currentPlayer := players nextBy: 1.
 	laps := aQuantity.
-	cardsHistory := OrderedCollection new.
+	cardsStory := OrderedCollection new.
 	aPlayersCollection
 		do: [ :player | 
 			2 timesRepeat: [ card := board deck deliverNewCard.

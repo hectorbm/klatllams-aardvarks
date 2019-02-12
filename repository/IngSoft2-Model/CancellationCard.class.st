@@ -28,25 +28,29 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #adding }
-CancellationCard >> addOn: aBoard affecting: otherCard [
-	self cancel: otherCard on: aBoard
-]
-
-{ #category : #affecting }
+{ #category : #action }
 CancellationCard >> affect: card on: aBoard [
 	self cancel: card on: aBoard
 ]
 
 { #category : #asserting }
-CancellationCard >> assertOwnerCanUseAnytime [
+CancellationCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
 ]
 
-{ #category : #affecting }
+{ #category : #asserting }
+CancellationCard >> assertOwnerCanUseOnTurnOf: aPlayer [
+	
+]
+
+{ #category : #action }
 CancellationCard >> cancel: otherCard on: aBoard [
 	aBoard deck activeCardsPlayerAffected isEmpty
 		ifTrue: [ owner first addCard: self.
-			AssertionFailure signal: 'You cannot play a canceling card when there are no active cards.' ].
-	aBoard deck removeAnActive: otherCard.
-	aBoard deck addToRemovedCards: self
+			AssertionFailure signal: 'Cannot play Cancellation when not active cards available' ].
+	aBoard deck removeAnActive: otherCard
+]
+
+{ #category : #asserting }
+CancellationCard >> isTransient [
+	^ true
 ]

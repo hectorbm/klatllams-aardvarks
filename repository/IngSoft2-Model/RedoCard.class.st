@@ -27,43 +27,47 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Card,
 	#instVars : [
-		'lastCard',
-		'lastCardIsSet'
+		'lastCard'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #updating }
 RedoCard >> addLastCard: aCard [
-	lastCard := aCard.
-	lastCardIsSet := true
+	lastCard addFirst: aCard.
+	
 ]
 
-{ #category : #adding }
-RedoCard >> addOn: aBoard affecting: playersCollection [
-	lastCard addOn: aBoard affecting: playersCollection
-]
-
-{ #category : #affecting }
+{ #category : #action }
 RedoCard >> affect: aPlayer on: aBoard [
-	lastCard affect: aPlayer on: aBoard.
-	aBoard deck addToRemovedCards: self
+	lastCard first affect: aPlayer on: aBoard.
 ]
 
 { #category : #asserting }
-RedoCard >> assertOwnerCanUseAnytime [
+RedoCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
+	lastCard first assertAffectedPlayerQuantity: playersCollection on: aBoard
 ]
 
-{ #category : #affecting }
+{ #category : #asserting }
+RedoCard >> assertOwnerCanUseOnTurnOf: aPlayer [
+	
+]
+
+{ #category : #action }
 RedoCard >> cancel: otherCard on: aBoard [
-	lastCard cancel: otherCard on: aBoard.
-	aBoard deck addToRemovedCards: self
+	lastCard first cancel: otherCard on: aBoard.
+	
 ]
 
 { #category : #initialization }
 RedoCard >> initialize [
-	owner := OrderedCollection new.
-	lastCardIsSet := false
+	super initialize.
+	lastCard := OrderedCollection new.
+]
+
+{ #category : #asserting }
+RedoCard >> isTransient [
+	^ lastCard first isTransient
 ]
 
 { #category : #updating }

@@ -28,25 +28,24 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #adding }
-AccelerationCard >> addOn: aBoard affecting: playersCollection [
-	self assertAffectedPlayerQuantity: playersCollection on: aBoard.
-	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: playersCollection)
-]
-
-{ #category : #affecting }
+{ #category : #action }
 AccelerationCard >> affect: aPlayer on: aBoard [
 	aBoard calculateAndUpdate: aPlayer by: 1
 ]
 
 { #category : #asserting }
 AccelerationCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
-	aBoard gameStatus players ~= playersCollection 
+	aBoard gameStatus players ~= playersCollection
 		ifTrue: [ AssertionFailure signal: 'Acceleration card must affect all the players' ]
 ]
 
 { #category : #asserting }
-AccelerationCard >> assertOwnerCanUseAnytime [
-	owner first addCard: self.
-	AssertionFailure signal: 'This is a permanent card'
+AccelerationCard >> assertOwnerCanUseOnTurnOf: aPlayer [
+	self owner ~= aPlayer
+		ifTrue: [ AssertionFailure signal: 'You cannot play now' ]
+]
+
+{ #category : #asserting }
+AccelerationCard >> isTransient [
+	^ false
 ]

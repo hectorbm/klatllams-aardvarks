@@ -26,33 +26,32 @@ Internal Representation and Key Implementation Points.
 Class {
 	#name : #RepeatCard,
 	#superclass : #Card,
-	#instVars : [
-		'notUsedCard'
-	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #adding }
-RepeatCard >> addOn: aBoard affecting: aPlayersCollection [
-	self assertAffectedPlayerQuantity: aPlayersCollection.
-	self affect: aPlayersCollection first on: aBoard
-]
-
-{ #category : #affecting }
+{ #category : #action }
 RepeatCard >> affect: aPlayer on: aBoard [
-	| aPosition |
+	| aPosition space |
 	aPosition := aBoard lastLandingPositionOf: aPlayer.
-	aPosition ~= 0
-		ifTrue: [ (aBoard spaces at: aPosition) affect: aPlayer on: aBoard ].
-	aBoard deck addToRemovedCards: self
+	space := aBoard spaces at: aPosition .
+	space affect: aPlayer on: aBoard
 ]
 
 { #category : #asserting }
-RepeatCard >> assertAffectedPlayerQuantity: aPlayersCollection [
-	aPlayersCollection size ~= 1
-		ifTrue: [ AssertionFailure signal: 'This card can only affect one player' ]
+RepeatCard >> assertAffectedPlayerQuantity: playersCollection on: aBoard [
+	playersCollection size = 1
+		ifTrue: [ aBoard gameStatus players
+				detect: [ :player | player = playersCollection first ]
+				ifNone: [ AssertionFailure signal: 'Invalid Player' ] ]
+		ifFalse: [ AssertionFailure signal: 'This card only affects 1 player' ]
 ]
 
 { #category : #asserting }
-RepeatCard >> assertOwnerCanUseAnytime [
+RepeatCard >> assertOwnerCanUseOnTurnOf: aPlayer [
+	
+]
+
+{ #category : #asserting }
+RepeatCard >> isTransient [
+	^ true
 ]

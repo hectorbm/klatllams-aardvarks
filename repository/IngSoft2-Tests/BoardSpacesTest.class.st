@@ -62,24 +62,25 @@ BoardSpacesTest >> testAtomicBombSpaceAndMoveEveryOneToInitialPosition [
 
 { #category : #tests }
 BoardSpacesTest >> testCardSpaceAssignsACardToAPlayer [
-	| spaces players board card deck|
-	card:= AccelerationCard new.
-	deck := Deck composedBy:{card}asOrderedCollection.
+	| spaces players board card deck |
+	card := AccelerationCard new.
+	deck := Deck composedBy: {card} asOrderedCollection.
 	spaces := {CardSpace new.
 	CardSpace new.
 	CardSpace new.
 	CardSpace new.
 	CardSpace new.
 	CardSpace new} asOrderedCollection.
-	players := { Player named:'Carrot' . Player named:'Nacho'} asOrderedCollection .
+	players := {(Player named: 'Carrot').
+	(Player named: 'Nacho')} asOrderedCollection.
 	board := Board playedBy: players composedBy: spaces using: deck.
-	card updateOwner: (players second).
-	board deck addAnActive:(CardPlayerAffected withCard: card affecting: players ).
+	card updateOwner: players second.
+	self should: [ spaces first affect: players first on: board ] raise: AssertionFailure.
+	board deck addAnActive: (CardPlayerAffected withCard: card affecting: players).
 	board deck removeAnActive: card.
-	(spaces first) affect: players first on: board.
-	card := (players first) myCards first.
-	self assert: (card owner) equals: (players first)
-	
+	spaces first affect: players first on: board.
+	card := players first myCards first.
+	self assert: card owner equals: players first
 ]
 
 { #category : #tests }
