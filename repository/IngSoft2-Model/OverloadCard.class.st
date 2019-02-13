@@ -29,6 +29,11 @@ Class {
 }
 
 { #category : #action }
+OverloadCard >> addTo: aBoard affecting: player [
+	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: player asOrderedCollection )
+]
+
+{ #category : #action }
 OverloadCard >> affect: aPlayer on: aBoard [
 	aBoard calculateAndUpdate: aPlayer by: 2 negated
 ]

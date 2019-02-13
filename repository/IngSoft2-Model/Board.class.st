@@ -125,7 +125,7 @@ Board >> lastLandingPositionOf: aPlayer [
 	landingPlayerPositions
 		detect: [ :landingPosition | landingPosition player = aPlayer ]
 		ifFound: [ :landingPosition | ^ landingPosition position ]
-		ifNone: [ AssertionFailure signal: 'The player did not move yet' ]
+		ifNone: [ ^0 ]
 ]
 
 { #category : #action }

@@ -39,6 +39,21 @@ RedoCard >> addLastCard: aCard [
 ]
 
 { #category : #action }
+RedoCard >> addTo: aBoard [
+	| players |
+	players := aBoard gameStatus players.
+	aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: players)
+]
+
+{ #category : #action }
+RedoCard >> addTo: aBoard affecting: player [
+	lastCard first isTransient
+		ifTrue: [ lastCard first affect: player on: aBoard.
+			aBoard deck addToRemovedCards: self ]
+		ifFalse: [ aBoard deck addAnActive: (CardPlayerAffected withCard: self affecting: player asOrderedCollection) ]
+]
+
+{ #category : #action }
 RedoCard >> affect: aPlayer on: aBoard [
 	lastCard first affect: aPlayer on: aBoard.
 ]
